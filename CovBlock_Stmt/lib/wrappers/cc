@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+import re
+import os
+import subprocess
+import sys
+from sys import argv
+
+name = os.path.basename(argv[0])
+
+oldPath = os.getenv('MOSS_OLD_PATH')
+commandLine = "PATH=%s which %s" % (oldPath, name)
+outBytes = subprocess.check_output(commandLine, shell=True).strip()
+
+hostCompiler = outBytes.decode()
+outputDir = os.getenv('MOSS_OUTPUT_DIR', './moss_out')
+output = outputDir + '/capture.txt'
+
+argPattern = re.compile(r'(-?([^\s=]+)(=\"(.*?)\"|=([^\s]*))?)')
+valuePattern = re.compile(r'"[^"\n]*"')
+
+argList = [name]
+
+for i in argv[1:]:
+    argLine = i
+    if argLine.endswith('.c') or argLine.endswith('.cpp'):
+        argLine = os.path.realpath(argLine)
+    argValue = valuePattern.search(argLine)
+    if argValue:
+        argLine = re.sub(valuePattern, "", argLine)
+        argProcValue = re.sub(r'"$', '\\\""', re.sub(r'^"', '"\\\"', argValue.group()))
+        argLine = '%s%s' % (argLine, argProcValue)
+    argList.append(argLine)
+    
+f = open(output, 'a')
+f.write(','.join(argList))
+f.write('\n')
+f.close()
+
+argList[0] = hostCompiler
+commandExecute = ' '.join(argList)
+result = os.system(commandExecute)
+#os.system("touch /~/hello")
+sys.exit(result >> 8)

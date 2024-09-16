@@ -1,0 +1,72 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# build
+**/build
+
+# test
+/**/test/mkdir-integrate
+
+## spin-off from test
+/**/test/**/debop-out
+/**/test/**/tmp
+/**/test/**/output*
+/**/test/**/time_info.txt
+/**/test/**/Cov_info.json
+/**/test/**/compare.txt
+/**/test/**/eval_rslt.txt
+/**/test/**/integration1*
+/**/test/**/source
+/**/test/**/mkdir-5.2.1
+
+/**/test/**/*reduced.c
+/**/test/**/log
+/**/test/**/identify_path
+/**/test/**/quantify_path
+/**/test/**/lines
+/**/test/**/programlist
+/**/test/**/domgad-out
+/**/test/**/errcode
+
+/**/test/**/subfile.c
+
+!**/**.c.real.origin.c
+!**/**.c.answer.c
+
+**/**.c
+**/**.o
+/**/compile.log
+/CovBlock_Stmt/test
+
+**/.vscode/**
+
