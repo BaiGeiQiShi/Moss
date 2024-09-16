@@ -1,37 +1,100 @@
 # Moss
-Moss is a multi-goal debloating technique. In its current implementation, Moss supports an objective function that encodes three goals: size reduction, attack surface reduction, and generality. It leverages a Markov Chain Monte Carlo (MCMC) sampling technique to explore the search space and search for a debloated program that maximizes the objective.
+Moss is a multi-granularity, multi-objective program debloating technique. Moss supports an objective function that quantifies three objectives: size reduction, attack surface reduction, and generality. It leverages a Markov Chain Monte Carlo (MCMC) sampling algorithm to search for a debloated program with the highest objective function value.
 
 
-
-## Installation
-check INSTALL.md for installation
-### Requirements
+## 1.Requirements
 * CMake >= 3.10.2
 * Clang and LLVM >= 9.0.0
-* spdlog >= 1.3.1
+* JDK >= 1.8
+* spdlog >= 1.0.0
 * ROPgadget >= 5.8
-* Frama-C >= 18.0
 * nlohmann/json
+* Ubuntu >= 18.04
+* Postgresql == 12.14
 
-Make sure you have installed all the required libraries (shown above). 
-Please refer to https://github.com/llvm/llvm-project.git to install `LLVM & Clang`. 
-Please refer to https://github.com/gabime/spdlog to install `spdlog`. 
-Please refer to https://github.com/JonathanSalwan/ROPgadget to install `ROPgadget`.
-Please refer to https://github.com/nlohmann/json to install `json`.
 
-### Linux
-Once you have all the requirements, do the following steps.
+## 2. Installation
+
+### 2.1 Create the docker image
+
+Use the `Dockerfile` in `./Docker` to create the docker image.
+
+```shell
+docker build -t moss .
+```
+
+This docker image includes **Moss**, **Moss Benchmark**, **CMake**, **JDK 1.8**, **ROPgadget**, **spdlog**, **Clang && LLVM**, **Postgresql-12.14**, and other essential requirements.
+
+### 2.2 Create and Run the container with this image
+
+```shell
+docker run -dit --name moss moss-env /bin/bash
+```
+
+### 2.3 Build Dependencies
+
+```bash
+# run inside the docker
+# Build llvm
+cd /usr/local/llvm-project && mkdir build && cd build && \ 
+cmake -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;compiler-rt;libclc;libcxx;libcxxabi;libunwind;lld;polly" -DLLVM_ENABLE_RTTI=ON -DLLVM_USE_LINKER=gold -G "Unix Makefiles" /usr/local/llvm-project/llvm && \
+make -j && make install
+
+# Setup Postgresql
+## install packages that require interaction
+apt install tcl8.6-dev expect
+cd /postgresql-12.14 && \
+chmod -R a+rw . && chown -R postgres . && \
+CC=clang CFLAGS="-O3" ./configure --prefix=$(pwd)/pgsql && \
+su postgres -c "make" && \
+su postgres -c "make install" && \
+rm -rf $(pwd)/pgsql/data && \
+mkdir $(pwd)/pgsql/data && \
+chmod -R a+rw . && chown -R postgres . && \
+su postgres -c "pgsql/bin/initdb -D $(pwd)/pgsql/data" && \
+su postgres -c "pgsql/bin/pg_ctl -D /postgresql-12.14/pgsql/data/ -l logfile start" && \
+sed -n  's/Moss\/Cov/Moss-postgres\/Cov/' start_debloat.py && \
+chmod -R a+rw src && cp -r /postgresql-12.14 /tmp/postgresql-12.14
+```
+<br>
 
 1. In CMakeLists.txt, change to your own paths the last two `include_directories` (lines ending with "Change to your own path!").
 2. You need to seperately install two tools in two folders(```CovBlock_Stmt``` and ```CovPath```).
 3. For ```CovBlock_Stmt```, Run `mkdir build && cd build`, `cmake ..` and `make`.
 4. For ```CovPath```, Run `mkdir build && cd build`, `cmake ..`, `make` and `cd .. && chmod 755 compile_java && ./compile_java`.
 
-## Installation Test
-### Quicktest
-### Integration Test
 
-## Usage
+## 3. Quick Test
+
+Run the test experiment to ensure your environment is correct. This command takes a maximum of 5 hours.
+
+```shell
+# Test your environment
+
+```
+
+
+## 4. Repeat whole experiments
+
+``` shell
+# Run Moss with must-handle inputs (26 programs)
+
+# Run Moss without must-handle inputs (26 programs)
+
+# Run Debop (26 programs)
+
+# Run Debop-M (26 programs). Debop-M: Debop with must-handle inputs.
+
+# Run Chisel with 22 programs
+
+# Run Razor with 22 programs
+
+# Run the ablation experiment
+
+```
+
+
+## 5. Usage
 check usage.md for basic usage
 
 ```
@@ -68,6 +131,36 @@ See `test/quicktest/test.sh` for an example.
 
 Note: If you want to use MCMC at the Statement level with equal select probability(i.e., Debop), you don't need to add -B -E -F -M options,  
 ```
+
+
+## 6. How to use Moss 
+
+### 6.1 Debloating without must-handle inputs
+
+In the Moss working directory:
+
+```shell
+python3 start_debloat.py
+```
+
+Where:
+
+- `METHOD`: 
+- `PROGNAME`: 
+- `version`: 
+- `debop_samplenum`:
+- `domgad_samplenum`:
+- `alphas`:
+- `ks`:
+- `betas`:
+- `CURRDIR`:
+- `DEBOP_DIR`:
+- `DOMGAD_DIR`:
+- `COV`:
+- `iternum`:
+- `realorcov`:
+
+
 
 ### Note
 It is strongly recommended that you provide Moss with a source file with all the code unexercised by the oracle inputs eliminated. This would make Moss's search space significantly smaller. To produce such a file, please refer to https://github.com/qixin5/debcov.
