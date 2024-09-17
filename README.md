@@ -58,14 +58,14 @@ chmod -R a+rw src && cp -r /postgresql-12.14 /tmp/postgresql-12.14
 **Note:**
 1. You need to seperately install two tools in two folders(```CovBlock_Stmt``` and ```CovPath```).
 2. If you move the path of LLVM, you need to change the CMakeLists.txt in ```CovBlock_Stmt``` and ```CovPath```. In CMakeLists.txt, you should change the last two lines of `include_directories` (lines ending with "Change to your own path!") to your own paths.
-3. To compile ```CovPath``` manually, you should run
+3. To compile ```CovPath``` manually, you should run:
 ```
 cd ./CovPath
 mkdir build && cd build
 cmake ..
 make
 ```
-4. To compile ```CovBlock_Stmt``` manually, you should run.
+4. To compile ```CovBlock_Stmt``` manually, you should run:
 ```
 cd ./CovBlock_Stmt
 mkdir build && cd build
