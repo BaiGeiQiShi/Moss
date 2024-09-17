@@ -1,0 +1,3 @@
+#!/bin/bash
+
+export COV_HOME=$(pwd)

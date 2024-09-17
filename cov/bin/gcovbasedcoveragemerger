@@ -1,0 +1,9 @@
+#!/bin/bash
+
+rootdir=$COV_HOME
+
+#First argument is a merge type ("binary" or "real")
+#Remaining arguments are either a coverage file or a directory containing such files
+
+java -cp :${rootdir}/build/java:${rootdir}/lib/java/* edu.gatech.cc.debaug.GCovBasedCoverageMerger $*
+

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+rootdir=$COV_HOME
+
+origin_codef=$1
+linef=$2
+gcovf=$3
+instru_for_removal=$4
+
+java -cp :${rootdir}/build/java:${rootdir}/lib/java/* edu.gatech.cc.debaug.GCovBasedCodeRemover ${origin_codef} ${linef} ${gcovf} ${instru_for_removal}
+
