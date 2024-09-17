@@ -26,10 +26,6 @@ WORKDIR /usr/local/
 RUN git clone https://github.com/BaiGeiQiShi/Moss.git && \
     cp -r Moss Moss-postgres
 
-# Clone Cov
-WORKDIR /usr/local/
-RUN git clone https://github.com/qixin5/cov.git
-
 # Clone MossBenchmark
 WORKDIR /
 RUN git clone https://github.com/BaiGeiQiShi/MossBenchmark.git
@@ -51,7 +47,7 @@ RUN mkdir -p /usr/local/Moss/CovBlock_Stmt/build && cd /usr/local/Moss/CovBlock_
     cd /usr/local/Moss/CovPath && ./compile_java
 
 # Build cov
-WORKDIR /usr/local/cov
+WORKDIR /usr/local/Moss/cov
 RUN ./compile.sh && bash ./setenv
 
 # Add user for chown-8.2
