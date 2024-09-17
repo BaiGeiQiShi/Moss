@@ -53,9 +53,7 @@ sed -n  's/Moss\/Cov/Moss-postgres\/Cov/' start_debloat.py && \
 chmod -R a+rw src && cp -r /postgresql-12.14 /tmp/postgresql-12.14
 ```
 
-<br>
-
-**Note:**
+### Note:
 1. You need to seperately install two tools in two folders(```CovBlock_Stmt``` and ```CovPath```).
 2. If you move the path of LLVM, you need to change the CMakeLists.txt in ```CovBlock_Stmt``` and ```CovPath```. In CMakeLists.txt, you should change the last two lines of `include_directories` (lines ending with "Change to your own path!") to your own paths.
 3. To compile ```CovPath``` manually, you should run:
