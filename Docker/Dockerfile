@@ -48,7 +48,7 @@ RUN mkdir -p /usr/local/Moss/CovBlock_Stmt/build && cd /usr/local/Moss/CovBlock_
 
 # Build cov
 WORKDIR /usr/local/Moss/cov
-RUN ./compile.sh && bash ./setenv
+RUN chmod 755 setenv && chmod 755 compile.sh && ./compile.sh && bash ./setenv
 
 # Add user for chown-8.2
 RUN groupadd mychown && \
