@@ -34,15 +34,11 @@ docker run -dit --name moss moss-env /bin/bash
 ### 2.3 Build Dependencies
 
 ```bash
-# run inside the docker
-# Build llvm
-cd /usr/local/llvm-project && mkdir build && cd build && \ 
-cmake -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;compiler-rt;libclc;libcxx;libcxxabi;libunwind;lld;polly" -DLLVM_ENABLE_RTTI=ON -DLLVM_USE_LINKER=gold -G "Unix Makefiles" /usr/local/llvm-project/llvm && \
-make -j && make install
-
-# Setup Postgresql
-## install packages that require interaction
+# Run inside the docker
+## Install packages that require interaction
 apt install tcl8.6-dev expect
+
+## Setup Postgresql
 cd /postgresql-12.14 && \
 chmod -R a+rw . && chown -R postgres . && \
 CC=clang CFLAGS="-O3" ./configure --prefix=$(pwd)/pgsql && \
@@ -56,17 +52,31 @@ su postgres -c "pgsql/bin/pg_ctl -D /postgresql-12.14/pgsql/data/ -l logfile sta
 sed -n  's/Moss\/Cov/Moss-postgres\/Cov/' start_debloat.py && \
 chmod -R a+rw src && cp -r /postgresql-12.14 /tmp/postgresql-12.14
 ```
+
 <br>
 
-1. In CMakeLists.txt, change to your own paths the last two `include_directories` (lines ending with "Change to your own path!").
-2. You need to seperately install two tools in two folders(```CovBlock_Stmt``` and ```CovPath```).
-3. For ```CovBlock_Stmt```, Run `mkdir build && cd build`, `cmake ..` and `make`.
-4. For ```CovPath```, Run `mkdir build && cd build`, `cmake ..`, `make` and `cd .. && chmod 755 compile_java && ./compile_java`.
-
+**Note:**
+1. You need to seperately install two tools in two folders(```CovBlock_Stmt``` and ```CovPath```).
+2. If you move the path of LLVM, you need to change the CMakeLists.txt in ```CovBlock_Stmt``` and ```CovPath```. In CMakeLists.txt, you should change the last two lines of `include_directories` (lines ending with "Change to your own path!") to your own paths.
+3. To compile ```CovPath``` manually, you should run
+```
+cd ./CovPath
+mkdir build && cd build
+cmake ..
+make
+```
+4. To compile ```CovBlock_Stmt``` manually, you should run.
+```
+cd ./CovBlock_Stmt
+mkdir build && cd build
+cmake ..
+make
+cd .. && chmod 755 compile_java && ./compile_java
+```
 
 ## 3. Quick Test
 
-Run the test experiment to ensure your environment is correct. This command takes a maximum of 5 hours.
+Run the test experiment to ensure your environment is correct. This command takes a maximum of 1 hour.
 
 ```shell
 # Test your environment
