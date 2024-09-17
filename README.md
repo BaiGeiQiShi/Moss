@@ -19,6 +19,8 @@ Moss is a multi-granularity, multi-objective program debloating technique. Moss 
 
 Use the `Dockerfile` in `./Docker` to create the docker image.
 
+**Note:** Before using the `Dockerfile`, you can change the parallelism of `make -j` in line 41 of `Dockerfile` according to the number of CPUs available on your device. This is because building LLVM can take several hours, and using multiple CPUs in parallel can reduce this time.
+
 ```shell
 docker build -t moss .
 ```
