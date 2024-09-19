@@ -231,7 +231,6 @@ public class GCovBasedMCMCSearch {
 			File codef = null, linef = null;
 
 			// Bloated path
-			// TODO: 这是什么
 			List<Integer> bloated = new ArrayList<Integer>();
 
 			// Build the trace-file map (showing which file-id, from ip_cover_dir, contains
@@ -323,95 +322,254 @@ public class GCovBasedMCMCSearch {
 			double curr_accept_pro = -1;
 			double next_accept_pro = -1;
 
-			// Start from a coverage that just fit in with base-inputs
+			// Use base inputs, then choose to start from base or top program
 			if (base_inputs.size() != 0) {
-				// Remove base inputs from search range
-				path_index.removeAll(base_inputs);
 
-				for (int i = 0; i < tnum; i++) {
-					bitvec[i] = 0;
-				}
-				for (int base_input : base_inputs) {
-					bitvec[base_input] = 1;
-				}
-
-				// compute initial scores for a path that just covers base-inputs
+				LogUtil.logInfo("-Generating full file");
+				// Compute initial scores for top program
 				{
-					List<PathCoverage> selected_pcovs = new ArrayList<PathCoverage>();
+					// Get coverage
+					List<PathCoverage> all_pcovs = new ArrayList<PathCoverage>();
 					for (int i = 0; i < tnum; i++) {
-						if (bitvec[i] == 1) {
-							selected_pcovs.add(pcovs.get(i));
-						}
+						all_pcovs.add(pcovs.get(i));
 					}
-
-					PathCoverage merged_pcov = null;
-					if (selected_pcovs.isEmpty()) {
-						merged_pcov = PathCoverageGenerator.getPathCoverageWithZeroCounts(pcovs.get(0)); 
+					PathCoverage all_merged_pcov = null;
+					if (all_pcovs.isEmpty()) {
+						all_merged_pcov = PathCoverageGenerator.getPathCoverageWithZeroCounts(pcovs.get(0));
 					} else {
-						merged_pcov = PathCoverageGenerator.getMergedPathCoverage(selected_pcovs, cov_merge_type);
+						all_merged_pcov = PathCoverageGenerator.getMergedPathCoverage(all_pcovs, cov_merge_type);
 					}
 
 					// Get reduced code
-					for (int idx = 0; idx != codefs.size(); idx++) {
+					for (int idx = 0; idx != codefs.size(); ++idx) {
 						codef = codefs.get(idx);
 						linef = linefs.get(codef);
 						if(codef==null || linef==null){
 							continue;
 						}
-						LogUtil.logTrace("---Base input: " + codef);
-						String reduced_code = GCovBasedCodeRemover.getRemovedString(codef, linef, merged_pcov);
-
-						File reduced_codef = new File(
+						full_gen_code = GCovBasedCodeRemover.getRemovedString(codef, linef, all_merged_pcov);
+						File full_gen_codef = new File(
 								codef.getAbsolutePath().replace(".c.cov.origin.c", ".c"));
-						File init_codef = new File(code_output_dpath,
-								codef.getName().replace(".c", ".sample-1.c"));
+						File full_gen_codef_origin = new File(
+								codef.getAbsolutePath().replace(".c.cov.origin.c", ".c").replace(".c", ".c.origin.c"));
 						try {
-							FileUtils.writeStringToFile(reduced_codef, reduced_code);
-							FileUtils.writeStringToFile(init_codef, reduced_code);
+							FileUtils.writeStringToFile(full_gen_codef, full_gen_code);
+							FileUtils.writeStringToFile(full_gen_codef_origin, full_gen_code);
 						} catch (Throwable t) {
 							System.err.println(t);
 							t.printStackTrace();
 						}
 					}
 
-					// Get size
-					int[] size_arr = getSize(prog_dpath, codefs);
-					if (size_arr == null) {
+					// #region compute score
+					LogUtil.logTrace("Calculating full-generality's scores");
+					int[] all_size_arr = getSize(prog_dpath, codefs);
+					if (all_size_arr == null) {
 						return;
 					}
 
 					if (sred_type == 0) {
-						int[] lnum_arr = getTotalAndCoveredLineNumbers(merged_pcov);
-						curr_sred = (float) (lnum_arr[0] - lnum_arr[1]) / (float) lnum_arr[0];
+						int[] lnum_arr = getTotalAndCoveredLineNumbers(all_merged_pcov);
+						all_sred = (float) (lnum_arr[0] - lnum_arr[1]) / (float) lnum_arr[0];
 					} else if (sred_type == 1) {
-						curr_sred = (float) (size_arr[0] - size_arr[1]) / (float) size_arr[0];
+						all_sred = (float) (all_size_arr[0] - all_size_arr[1]) / (float) all_size_arr[0];
 					} else if (sred_type == 2) {
-						curr_sred = (float) (size_arr[4] - size_arr[5]) / (float) size_arr[4];
+						all_sred = (float) (all_size_arr[4] - all_size_arr[5]) / (float) all_size_arr[4];
 					}
 
 					// Compute scores
-					curr_ared = (float) (size_arr[2] - size_arr[3]) / (float) size_arr[2];
-					if (curr_ared < (float) 0.0) {
-						curr_ared = (float) 0.0;
+					all_ared = (float) (all_size_arr[2] - all_size_arr[3]) / (float) all_size_arr[2];
+					if (all_ared < (float) 0.0) {
+						all_ared = (float) 0.0;
+					}
+					all_red = (float) ((1 - kr) * all_sred + kr * all_ared);
+					all_gen = (float) 1.0;
+					all_oscore = (float) ((1 - w) * all_red + w * all_gen);
+					LogUtil.logDebug(String.format("Full File's O-score %f = %f + %f", all_oscore, (1 - w) * all_red, w * all_gen));
+
+					all_dscore = (float) Math.exp(kvalue * all_oscore);
+					// #endregion
+				}
+
+				// Compute initial scores for base program
+				{
+					// Remove base inputs from search range
+					path_index.removeAll(base_inputs);
+
+					for (int i = 0; i < tnum; i++) {
+						bitvec[i] = 0;
+					}
+					for (int base_input : base_inputs) {
+						bitvec[base_input] = 1;
 					}
 
-					curr_red = (float) ((1 - kr) * curr_sred + kr * curr_ared);
-					curr_gen = 0;
-					for (int i = 0; i < tnum; i++) {
-						if (bitvec[i] == 1 || merged_pcov.coversByLines(pcovs.get(i))) {
-							curr_gen += trace_count_map.get(i).intValue();
-
-							// get bloated pathes
-							if (bitvec[i] != 1) {
-								bloated.add(i);
+					// Compute initial scores for a path that just covers base-inputs
+					{
+						List<PathCoverage> selected_pcovs = new ArrayList<PathCoverage>();
+						for (int i = 0; i < tnum; i++) {
+							if (bitvec[i] == 1) {
+								selected_pcovs.add(pcovs.get(i));
 							}
+						}
 
+						PathCoverage base_merged_pcov = null;
+						if (selected_pcovs.isEmpty()) {
+							base_merged_pcov = PathCoverageGenerator.getPathCoverageWithZeroCounts(pcovs.get(0));
+						} else {
+							base_merged_pcov = PathCoverageGenerator.getMergedPathCoverage(selected_pcovs, cov_merge_type);
+						}
+
+						// Get reduced code
+						for (int idx = 0; idx != codefs.size(); idx++) {
+							codef = codefs.get(idx);
+							linef = linefs.get(codef);
+							if (codef == null || linef == null) {
+								continue;
+							}
+							LogUtil.logTrace("---Base input: " + codef);
+							String reduced_code = GCovBasedCodeRemover.getRemovedString(codef, linef, base_merged_pcov);
+
+							File reduced_codef = new File(
+									codef.getAbsolutePath().replace(".c.cov.origin.c", ".c"));
+							try {
+								FileUtils.writeStringToFile(reduced_codef, reduced_code);
+							} catch (Throwable t) {
+								System.err.println(t);
+								t.printStackTrace();
+							}
+						}
+
+
+						// #region Calculate Scores for base-covered path
+						LogUtil.logTrace("Calculating base-generality's scores");
+
+						// Get size
+						int[] zero_size_arr = getSize(prog_dpath, codefs);
+						if (zero_size_arr == null) {
+							return;
+						}
+
+						if (sred_type == 0) {
+							int[] lnum_arr = getTotalAndCoveredLineNumbers(base_merged_pcov);
+							zero_sred = (float) (lnum_arr[0] - lnum_arr[1]) / (float) lnum_arr[0];
+						} else if (sred_type == 1) {
+							zero_sred = (float) (zero_size_arr[0] - zero_size_arr[1]) / (float) zero_size_arr[0];
+						} else if (sred_type == 2) {
+							zero_sred = (float) (zero_size_arr[4] - zero_size_arr[5]) / (float) zero_size_arr[4];
+						}
+
+						// Compute scores
+						zero_ared = (float) (zero_size_arr[2] - zero_size_arr[3]) / (float) zero_size_arr[2];
+						if (zero_ared < (float) 0.0) {
+							zero_ared = (float) 0.0;
+						}
+
+						zero_red = (float) ((1 - kr) * zero_sred + kr * zero_ared);
+						zero_gen = 0;
+						for (int i = 0; i < tnum; i++) {
+							if (bitvec[i] == 1 || base_merged_pcov.coversByLines(pcovs.get(i))) {
+								zero_gen += trace_count_map.get(i).intValue();
+
+								// get bloated pathes
+								if (bitvec[i] != 1) {
+									bloated.add(i);
+								}
+
+							}
+						}
+						zero_gen /= quan_num;
+						zero_oscore = (float) ((1 - w) * zero_red + w * zero_gen);
+						LogUtil.logDebug(String.format("Base File's O-score %f = %f + %f", zero_oscore, (1 - w) * zero_red, w * zero_gen));
+						zero_dscore = (float) Math.exp(kvalue * zero_oscore);
+						// #endregion
+					}
+				}
+
+
+				// choose top or base program
+				if (zero_oscore >= all_oscore) {
+					LogUtil.logInfo("Base file O-Score: " + zero_oscore + " >= Full file O-Score: " + all_oscore);
+					LogUtil.logInfo("Start at Base file");
+
+					curr_sred = zero_sred;
+					curr_ared = zero_ared;
+					curr_red = zero_red;
+					curr_gen = zero_gen;
+					curr_oscore = zero_oscore;
+					curr_dscore = zero_dscore;
+
+					for (int i = 0; i < tnum; i++) {
+						bitvec[i] = 0;
+					}
+					for (int base_input : base_inputs) {
+						bitvec[base_input] = 1;
+					}
+
+					// Generate sample -1
+					// zero-generality files are just generated and didn't get overriden. Copy these
+					// as sample -1
+					LogUtil.logDebug("--Copying reduced file as sample -1");
+					for (int idx = 0; idx != codefs.size(); ++idx) {
+						codef = codefs.get(idx);
+						linef = linefs.get(codef);
+						if(codef==null || linef==null){
+							continue;
+						}
+						File reducedcodef = new File(
+								codef.getAbsolutePath().replace(".c.cov.origin.c", ".c"));
+						File init_codef_tosave = new File(code_output_dpath,
+								codef.getName().replace(".c.cov.origin.c",".c").replace(".c", ".sample-1.c"));
+						File init_codef = new File(
+								codef.getAbsolutePath().replace(".c.cov.origin.c",".c").replace(".c", ".sample-1.c"));
+						LogUtil.logTrace("---Copy " + reducedcodef.getAbsolutePath() + " to " + init_codef);
+						LogUtil.logTrace("---Copy " + reducedcodef.getAbsolutePath() + " to " + init_codef_tosave);
+						try {
+							FileUtils.copyFile(reducedcodef, init_codef_tosave);
+							FileUtils.copyFile(reducedcodef, init_codef);
+						} catch (Throwable t) {
+							System.err.println(t);
+							t.printStackTrace();
 						}
 					}
-					curr_gen /= quan_num;
-					curr_oscore = (float) ((1 - w) * curr_red + w * curr_gen);
+				} else { //zero < full
+					LogUtil.logInfo("Full file O-Score: " + all_oscore + " > Base file O-Score: " + zero_oscore);
+					LogUtil.logInfo("Start at Full file");
+					curr_sred = all_sred;
+					curr_ared = all_ared;
+					curr_red = all_red;
+					curr_gen = all_gen;
+					curr_oscore = all_oscore;
+					curr_dscore = all_dscore;
 
-					curr_dscore = (float) Math.exp(kvalue * curr_oscore);
+					for (int i = 0; i < tnum; i++) {
+						bitvec[i] = 1;
+					}
+
+					// Generate sample -1.c
+					// full-generality files are exactly files in codefs. Copy them as sample -1
+					LogUtil.logDebug("--Copying cov.origin.c as sample -1");
+					for (int idx = 0; idx != codefs.size(); ++idx) {
+						codef = codefs.get(idx);
+						linef = linefs.get(codef);
+						if(codef==null || linef==null){
+							continue;
+						}
+
+						File origin_codef = new File(codef.getAbsolutePath().replace(".c.cov.origin.c", ".c").replace(".c", ".c.origin.c"));
+						File init_codef_tosave = new File(
+								codef.getAbsolutePath().replace(".c.cov.origin.c", ".c").replace(".c", ".sample-1.c"));
+						File init_codef = new File(code_output_dpath,
+								codef.getName().replace(".c.cov.origin.c", ".c").replace(".c", ".sample-1.c"));
+						LogUtil.logTrace("---Copy " + codef.getAbsolutePath().replace(".c.cov.origin.c", ".c").replace(".c", ".c.origin.c") + " to " + init_codef);
+						LogUtil.logTrace("---Copy " + codef.getAbsolutePath().replace(".c.cov.origin.c", ".c").replace(".c", ".c.origin.c") + " to " + init_codef_tosave);
+						try {
+							FileUtils.copyFile(origin_codef, init_codef_tosave);
+							FileUtils.copyFile(origin_codef, init_codef);
+						} catch (Throwable t) {
+							System.err.println(t);
+							t.printStackTrace();
+						}
+					}
 				}
 
 			}
