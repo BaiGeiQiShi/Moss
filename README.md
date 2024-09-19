@@ -6,7 +6,7 @@ Moss is a multi-granularity, multi-objective program debloating technique. Moss 
 * CMake >= 3.10.2
 * Clang and LLVM >= 9.0.0
 * JDK >= 1.8
-* spdlog >= 1.3.1
+* spdlog >= 1.0.0
 * ROPgadget >= 5.8
 * nlohmann/json
 * Ubuntu >= 18.04
