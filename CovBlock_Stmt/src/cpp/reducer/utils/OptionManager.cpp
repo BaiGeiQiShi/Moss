@@ -4,6 +4,7 @@
 #include <getopt.h>
 #include <string>
 #include <sstream>
+#include <spdlog/spdlog.h>
 
 #include "llvm/Support/FileSystem.h"
 #include "llvm/Support/Program.h"
