@@ -6,7 +6,7 @@ Moss is a multi-granularity, multi-objective program debloating technique. Moss 
 * CMake >= 3.10.2
 * Clang and LLVM >= 9.0.0
 * JDK >= 1.8
-* spdlog >= 1.0.0
+* spdlog >= 1.3.1
 * ROPgadget >= 5.8
 * nlohmann/json
 * Ubuntu >= 18.04
@@ -27,7 +27,7 @@ docker build -t moss-env .
 
 This docker image includes **Moss**, **Moss Benchmark**, **CMake**, **JDK 1.8**, **ROPgadget**, **spdlog**, **Clang && LLVM**, **Postgresql-12.14**, and other essential requirements.
 
-### 2.2 Create and Run the container with this image
+### 2.2 Create and run the container with this image
 
 ```shell
 docker run -dit --name moss moss-env /bin/bash
@@ -36,7 +36,7 @@ docker run -dit --name moss moss-env /bin/bash
 ### 2.3 Build Dependencies
 
 ```bash
-# Run inside the docker
+# Run inside the docker container
 ## Install packages that require interaction
 apt install tcl8.6-dev expect
 
@@ -76,7 +76,7 @@ cd .. && chmod 755 compile_java && ./compile_java
 
 ## 3. Quick Test
 
-Run the test experiment to ensure your environment is correct. This command takes a maximum of 1 hour.
+Run the test experiment to ensure your environment is correct. This command takes a few minutes.
 
 ```shell
 # Test your environment
@@ -176,4 +176,4 @@ Where:
 It is strongly recommended that you provide Moss with a source file with all the code unexercised by the oracle inputs eliminated. This would make Moss's search space significantly smaller. To produce such a file, please refer to https://github.com/qixin5/debcov.
 
 ## Contact
-If you have questions, please contact Qi Xin via qxin6@gatech.edu.
+If you have questions, please contact Jinran Tang via jinrantang@whu.edu.cn.
