@@ -13,22 +13,13 @@ RUN apt-get update && apt-get install -y cmake  \
     git && \
     python3 -m pip install ROPgadget && \
     cd /tmp/ && \
-    wget https://github.com/gabime/spdlog/archive/refs/tags/v1.0.0.tar.gz && \
-    tar -zxf v1.0.0.tar.gz && mv spdlog-1.0.0/include/spdlog /usr/include/
+    wget https://github.com/gabime/spdlog/archive/refs/tags/v1.3.1.tar.gz && \
+    tar -zxf v1.3.1.tar.gz && mv spdlog-1.3.1/include/spdlog /usr/include/
 
 # Clone llvm-project
 WORKDIR /usr/local/
 RUN wget https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-9.0.1.tar.gz && \
     tar -xf llvmorg-9.0.1.tar.gz && mv llvm-project-llvmorg-9.0.1 llvm-project
-
-# Clone Moss
-WORKDIR /usr/local/
-RUN git clone https://github.com/BaiGeiQiShi/Moss.git && \
-    cp -r Moss Moss-postgres
-
-# Clone MossBenchmark
-WORKDIR /
-RUN git clone https://github.com/BaiGeiQiShi/MossBenchmark.git
 
 # Build LLVM
 WORKDIR /usr/local/llvm-project
@@ -40,11 +31,20 @@ RUN mkdir build && cd build && \
     -G "Unix Makefiles" /usr/local/llvm-project/llvm && \
     make -j && make install
 
+# Clone Moss
+WORKDIR /usr/local/
+RUN git clone https://github.com/BaiGeiQiShi/Moss.git && \
+    cp -r Moss Moss-postgres
+
 # Build Moss
 WORKDIR /usr/local/Moss
 RUN mkdir -p /usr/local/Moss/CovBlock_Stmt/build && cd /usr/local/Moss/CovBlock_Stmt/build && cmake .. && make && \
     mkdir -p /usr/local/Moss/CovPath/build && cd /usr/local/Moss/CovPath/build && cmake .. && make && \
     cd /usr/local/Moss/CovPath && ./compile_java
+
+# Clone MossBenchmark
+WORKDIR /
+RUN git clone https://github.com/BaiGeiQiShi/MossBenchmark.git
 
 # Build cov
 WORKDIR /usr/local/Moss/cov
