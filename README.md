@@ -22,7 +22,7 @@ Use the `Dockerfile` in `./Docker` to create the docker image.
 **Note:** Before using the `Dockerfile`, you can change the parallelism of `make -j` in line 41 of `Dockerfile` according to the number of CPUs available on your device. This is because building LLVM can take several hours, and using multiple CPUs in parallel can reduce this time.
 
 ```shell
-docker build -t moss .
+docker build -t moss-env .
 ```
 
 This docker image includes **Moss**, **Moss Benchmark**, **CMake**, **JDK 1.8**, **ROPgadget**, **spdlog**, **Clang && LLVM**, **Postgresql-12.14**, and other essential requirements.
@@ -30,7 +30,7 @@ This docker image includes **Moss**, **Moss Benchmark**, **CMake**, **JDK 1.8**,
 ### 2.2 Create and Run the container with this image
 
 ```shell
-docker run -dit --name moss-env moss /bin/bash
+docker run -dit --name moss moss-env /bin/bash
 ```
 
 ### 2.3 Build Dependencies
