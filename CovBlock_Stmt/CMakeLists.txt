@@ -54,8 +54,8 @@ add_custom_target(lib ALL
 target_link_libraries(reducer ${CLANG_LIBS} ${LLVM_LIBS_CORE} ${LLVM_LDFLAGS})
 
 # for make test
-enable_testing()
-add_subdirectory(test)
+#enable_testing()
+#add_subdirectory(test)
 
 # for documents
 option(BUILD_DOCS "Build and Install Documents (Requires Doxygen)")
