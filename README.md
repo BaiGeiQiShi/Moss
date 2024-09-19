@@ -30,7 +30,7 @@ This docker image includes **Moss**, **Moss Benchmark**, **CMake**, **JDK 1.8**,
 ### 2.2 Create and Run the container with this image
 
 ```shell
-docker run -dit --name moss moss-env /bin/bash
+docker run -dit --name moss-env moss /bin/bash
 ```
 
 ### 2.3 Build Dependencies
