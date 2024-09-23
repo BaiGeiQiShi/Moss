@@ -24,7 +24,7 @@ We use [debcov](https://github.com/qixin5/debcov) to produce such a file. To use
 
 Use the `Dockerfile` in `./Docker` to create the docker image.
 
-**Note:** Before using the `Dockerfile`, you can change the parallelism of `make -j` in line 41 of `Dockerfile` according to the number of CPUs available on your device. This is because building LLVM can take several hours, and using multiple CPUs in parallel can reduce this time.
+**Note:** Before using the `Dockerfile`, you can change the parallelism of `make -j` in line 32 of `Dockerfile` according to the number of CPUs available on your device. This is because building LLVM can take several hours, and using multiple CPUs in parallel can reduce this time.
 
 ```shell
 docker build -t moss-env .
@@ -127,7 +127,7 @@ See `test/quicktest/test.sh` for an example.
 -I: If you want to debloat programs with must-handle inputs, add this option, and you must specify the testcase id file following this option.
 -T: If you want to debloat a program that has already been debloated, please add this option and specify the reduced program.
 
-Note: If you want to use MCMC at the Statement level with equal select probability(i.e., Debop), you don't need to add -B -E -F -M options,  
+Note: If you want to use MCMC at the Statement level with equal select probability(i.e., Debop), you don't need to add -F -M options,  
 ```
 
 
