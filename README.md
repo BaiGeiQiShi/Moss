@@ -85,9 +85,9 @@ Run the test experiment to ensure your environment is correct. This command take
 ```shell
 # Test your environment
 cd ./quicktest
-
-
+python3 start_debloat.py
 ```
+After running, check that you have three `moss-out` directories containing the sample C files and three debloating logs (end with `.txt`) in `./log`. These logs should show that Moss generated **1** sample at each stage. If you've found all these, the running was successful.
 
 
 ## 4. Usage
