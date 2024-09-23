@@ -103,10 +103,8 @@ MOSS_BIN [OPTION] ORACLE_FILE SOURCE_FILE
 2. Size of reduced program
 3. Number of gadgets in original program
 4. Number of gadgets in reduced program
-5. Number of total tests
-6. Number of tests the program passes
-The resulting scores should be redirected to a file named "eval_rslt.txt".
-See `test/quicktest/test.sh` for an example.
+5. Number of total inputs
+6. Number of inputs that the program can correctly handle
 
 **SOURCE_FILE**: The program source file(s).
 
@@ -127,7 +125,7 @@ See `test/quicktest/test.sh` for an example.
 -I: If you want to debloat programs with must-handle inputs, add this option, and you must specify the testcase id file following this option.
 -T: If you want to debloat a program that has already been debloated, please add this option and specify the reduced program.
 
-Note: If you want to use MCMC at the Statement level with equal select probability(i.e., Debop), you don't need to add -F -M options,  
+Note: If you want to use MCMC at the Statement level with equal select probability(i.e., Debop), you don't need to add -F -M options.
 ```
 
 
