@@ -144,7 +144,7 @@ MOSS_BIN [OPTION] ORACLE_FILE SOURCE_FILE
 We also integrated Debop into Moss. If you don't use either the -F option or the -M option, the default setting of CovBloct_Stmt is Debop.
 
 
-## 5. Repeat whole experiments
+## 5. Reproduce our experiments
 In the docker container, we have cloned the Moss benchmark. To reproduce our experiments, you can execute the following cli command:
 
 ``` shell
