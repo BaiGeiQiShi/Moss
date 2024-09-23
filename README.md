@@ -41,7 +41,7 @@ docker run -dit --name moss moss-env /bin/bash
 ### 2.3 Build Dependencies
 
 ```bash
-# Run inside the docker container
+# Inside the docker container
 ## Install packages that require interaction
 apt install tcl8.6-dev expect
 
@@ -81,11 +81,11 @@ cd .. && chmod 755 compile_java && ./compile_java
 
 
 ## 3. Quick Test
-
 Run the test experiment to ensure your environment is correct. This command takes a few minutes.
-
 ```shell
 # Test your environment
+cd ./mkdir-5.2.1-quicktest
+
 
 ```
 
@@ -94,7 +94,7 @@ Run the test experiment to ensure your environment is correct. This command take
 ```
 MOSS_BIN [OPTION] ORACLE_FILE SOURCE_FILE
 ```
-**MOSS_BIN**: The Moss binary.
+**MOSS_BIN**: The Moss binary (CovPath or CovBlock_Stmt).
 
 **ORACLE_FILE**: The oracle script used to compile source, run tests, and compute scores. It should compute a total of six scores:
 1. Size of original program
@@ -108,7 +108,7 @@ MOSS_BIN [OPTION] ORACLE_FILE SOURCE_FILE
 
 **OPTION**:
 ```
-#CovPath
+# CovPath
 -t: Path to trace count file
 -i: Path to the identify path folder
 -s: Path to save samples
@@ -127,7 +127,7 @@ MOSS_BIN [OPTION] ORACLE_FILE SOURCE_FILE
 -S: Set the size reduction type (0: covered lines; 1: executable bytes; 2: covered stmts)
 -B: A file that indicates the must-handle inputs.
 
-#CovBlock_Stmt
+# CovBlock_Stmt
 -m: Max samples number
 -i: Max iterations number
 -a: Alpha value (weight for attack surface reduction)
@@ -148,32 +148,33 @@ We also integrated Debop into Moss. If you don't use either the -F option or the
 In the docker container, we have cloned the Moss benchmark. To reproduce our experiments, you can execute the following cli command:
 
 ``` shell
-cd /MossBenchmark
+# 1.Choose an arbitrary program to debloat
+## Choose an arbitrary program (from 25 programs) to debloat
+cd /MossBenchmark/$PROGRAM
+## To debloat PostgreSQL, you need to use this following command instead. Since PostgreSQL can only be executed under the postgresql user, we created a separate copy of PostgreSQL in the root directory to facilitate file permission modifications.
+cd ./postgresql-12.14
 
-# Choose an arbitrary program to debloat
-cd $PROGRAM
-
-# Run Moss without must-handle inputs
+# 2.Run Moss without must-handle inputs
 python3 start_debloat.py
 
-# Run Moss with must-handle inputs (26 programs)
+# 3.Run Moss with must-handle inputs (26 programs)
 python3 start_debloat_must.py
 
-# Run Debop (26 programs)
+# 4.Run Debop (26 programs)
 python3 start_debloat_debop.py
 
-# Run Debop-M (26 programs). Debop-M: Debop with must-handle inputs.
+# 5.Run Debop-M (26 programs). Debop-M: Debop with must-handle inputs.
 python3 start_debloat_debopm.py
 
-# Run the ablation experiment
+# 6.Run the ablation experiment
 python3 start_debloat-s12.py  #Moss-s1,2
 python3 start_debloat-s13.py  #Moss-s1,3
 python3 start_debloat-s23.py  #Moss-s2,3
 
-# Run Chisel with 22 programs
+# 7.Run Chisel with 22 programs
 ./run_chisel
 
-# Run Razor with 22 programs
+# 8.Run Razor with 22 programs
 ./run_razor
 ```
 
