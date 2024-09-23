@@ -91,12 +91,10 @@ Run the test experiment to ensure your environment is correct. This command take
 
 
 ## 4. Usage
-check usage.md for basic usage
-
 ```
 MOSS_BIN [OPTION] ORACLE_FILE SOURCE_FILE
 ```
-**MOSS_BIN**: The Moss binary (build/bin/reducer).
+**MOSS_BIN**: The Moss binary.
 
 **ORACLE_FILE**: The oracle script used to compile source, run tests, and compute scores. It should compute a total of six scores:
 1. Size of original program
