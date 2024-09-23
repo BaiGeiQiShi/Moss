@@ -97,12 +97,12 @@ MOSS_BIN [OPTION] ORACLE_FILE SOURCE_FILE
 **MOSS_BIN**: The Moss binary (CovPath or CovBlock_Stmt).
 
 **ORACLE_FILE**: The oracle script used to compile source, run tests, and compute scores. It should compute a total of six scores:
-1. Size of original program
-2. Size of reduced program
-3. Number of gadgets in original program
-4. Number of gadgets in reduced program
-5. Number of total inputs
-6. Number of inputs that the program can correctly handle
+1. Size of original program.
+2. Size of reduced program.
+3. Number of gadgets in original program.
+4. Number of gadgets in reduced program.
+5. Number of total inputs.
+6. Number of inputs that the program can correctly handle.
 
 **SOURCE_FILE**: The program source file(s).
 
