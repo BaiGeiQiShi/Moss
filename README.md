@@ -1,6 +1,11 @@
 # Moss
 Moss is a multi-granularity, multi-objective program debloating technique. Moss supports an objective function that quantifies three objectives: size reduction, attack surface reduction, and generality. It leverages a Markov Chain Monte Carlo (MCMC) sampling algorithm to search for a debloated program with the highest objective function value.
 
+### Please note
+Moss starts debloating from the source file with all the code unexercised by the oracle inputs eliminated. 
+This makes Moss's search space significantly smaller. 
+We use [debcov](https://github.com/qixin5/debcov) to produce such a file. To use debcov conveniently in our experiments, we renamed it to cov and integrated it into this repository.
+
 
 ## 1.Requirements
 * CMake >= 3.10.2
@@ -74,6 +79,7 @@ make
 cd .. && chmod 755 compile_java && ./compile_java
 ```
 
+
 ## 3. Quick Test
 
 Run the test experiment to ensure your environment is correct. This command takes a few minutes.
@@ -84,33 +90,13 @@ Run the test experiment to ensure your environment is correct. This command take
 ```
 
 
-## 4. Repeat whole experiments
-
-``` shell
-# Run Moss with must-handle inputs (26 programs)
-
-# Run Moss without must-handle inputs (26 programs)
-
-# Run Debop (26 programs)
-
-# Run Debop-M (26 programs). Debop-M: Debop with must-handle inputs.
-
-# Run Chisel with 22 programs
-
-# Run Razor with 22 programs
-
-# Run the ablation experiment
-
-```
-
-
-## 5. Usage
+## 4. Usage
 check usage.md for basic usage
 
 ```
-PENBLOAT_BIN [OPTION] ORACLE_FILE SOURCE_FILE
+MOSS_BIN [OPTION] ORACLE_FILE SOURCE_FILE
 ```
-**Moss_BIN**: The Moss binary (build/bin/reducer).
+**MOSS_BIN**: The Moss binary (build/bin/reducer).
 
 **ORACLE_FILE**: The oracle script used to compile source, run tests, and compute scores. It should compute a total of six scores:
 1. Size of original program
@@ -126,54 +112,61 @@ See `test/quicktest/test.sh` for an example.
 
 **OPTION**:
 ```
+#CovPath
+
+
+#CovBlock_Stmt
 -m: Number of samples.
 -i: Number of sampling iterations. (Default is 100. Consider using a large value.)
 -a: Alpha value (weight for attack surface reduction).
 -e: Beta value (weight for generality).
 -k: K value (for computing density values).
 -s: No value needed. Save temp files.
--B: If you want to use MCMC at the BasicBlock level, add this option.
--E: If you want to use MCMC at the Dependency level, add this option, and you must specify the dependency relation file following this option.
 -F: If you want to use MCMC at the CovBlock level, add this option, and you must specify the coverage info file following this option.
 -M: If you want to use MCMC at the Statement level with unequal select probability, add this option, and you must specify the coverage info file following this option.
--I: If you want to debloating programs with some base inputs(testcases that must pass), add this option, and you must specify the testcase id file following this option.
--T: If you want to debloating a reduced program, please add this option and specify the reduced program.
+-I: If you want to debloat programs with must-handle inputs, add this option, and you must specify the testcase id file following this option.
+-T: If you want to debloat a program that has already been debloated, please add this option and specify the reduced program.
 
 Note: If you want to use MCMC at the Statement level with equal select probability(i.e., Debop), you don't need to add -B -E -F -M options,  
 ```
 
 
-## 6. How to use Moss 
+## 5. Repeat whole experiments
+In the docker container, we have cloned the Moss benchmark. To reproduce our experiments, you can execute the following cli command:
 
-### 6.1 Debloating without must-handle inputs
+``` shell
+cd /MossBenchmark
 
-In the Moss working directory:
+# Choose an arbitrary program to debloat
+cd $PROGRAM
 
-```shell
+# Run Moss without must-handle inputs
 python3 start_debloat.py
+
+# Run Moss with must-handle inputs (26 programs)
+python3 start_debloat_must.py
+
+# Run Debop (26 programs)
+python3 start_debloat_debop.py
+
+# Run Debop-M (26 programs). Debop-M: Debop with must-handle inputs.
+python3 start_debloat_debopm.py
+
+# Run the ablation experiment
+python3 start_debloat-s12.py  #Moss-s1,2
+python3 start_debloat-s13.py  #Moss-s1,3
+python3 start_debloat-s23.py  #Moss-s2,3
+
+# Run Chisel with 22 programs
+./run_chisel
+
+# Run Razor with 22 programs
+./run_razor
 ```
 
-Where:
-
-- `METHOD`: 
-- `PROGNAME`: 
-- `version`: 
-- `debop_samplenum`:
-- `domgad_samplenum`:
-- `alphas`:
-- `ks`:
-- `betas`:
-- `CURRDIR`:
-- `DEBOP_DIR`:
-- `DOMGAD_DIR`:
-- `COV`:
-- `iternum`:
-- `realorcov`:
-
-
-
 ### Note
-It is strongly recommended that you provide Moss with a source file with all the code unexercised by the oracle inputs eliminated. This would make Moss's search space significantly smaller. To produce such a file, please refer to https://github.com/qixin5/debcov.
+
+
 
 ## Contact
 If you have questions, please contact Jinran Tang via jinrantang@whu.edu.cn.
