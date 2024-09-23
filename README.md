@@ -162,8 +162,7 @@ python3 start_debloat-s23.py  #Moss-s2,3
 ./run_razor
 ```
 
-### Note
-
+If you want to know more details about the experiment, please refer to [MossBenchmark](https://github.com/BaiGeiQiShi/MossBenchmark).
 
 
 ## Contact
