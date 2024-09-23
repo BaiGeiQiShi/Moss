@@ -84,7 +84,7 @@ cd .. && chmod 755 compile_java && ./compile_java
 Run the test experiment to ensure your environment is correct. This command takes a few minutes.
 ```shell
 # Test your environment
-cd ./mkdir-5.2.1-quicktest
+cd ./quicktest
 
 
 ```
