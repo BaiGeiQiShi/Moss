@@ -33,7 +33,7 @@ WORKDIR /usr/local/
 RUN git clone https://github.com/gabime/spdlog.git
 
 # Build spdlog
-WORKDIR /usr/local/
+WORKDIR /usr/local/spdlog
 RUN mkdir build && cd build && \
     cmake .. && make -j
 
