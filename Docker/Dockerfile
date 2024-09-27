@@ -46,7 +46,7 @@ RUN git clone https://github.com/BaiGeiQiShi/Moss.git && \
 WORKDIR /usr/local/Moss
 RUN mkdir -p /usr/local/Moss/CovBlock_Stmt/build && cd /usr/local/Moss/CovBlock_Stmt/build && cmake .. && make && \
     mkdir -p /usr/local/Moss/CovPath/build && cd /usr/local/Moss/CovPath/build && cmake .. && make && \
-    cd /usr/local/Moss/CovPath && ./compile_java
+    cd /usr/local/Moss/CovPath && chmod 755 compile_java && ./compile_java
 
 # Clone MossBenchmark
 WORKDIR /
