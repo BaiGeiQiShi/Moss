@@ -7,6 +7,8 @@
 #include "Frontend.h"
 #include "ReadTempfile.h"
 
+using json = nlohmann::json;
+
 std::vector<std::tuple<std::string, int, std::string, std::vector<int>, int,
                        int, clang::Stmt *>>
     ASTsList::StmtIndexList =
