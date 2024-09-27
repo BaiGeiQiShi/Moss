@@ -11,10 +11,7 @@ RUN apt-get update && apt-get install -y cmake  \
     libperl-dev \
     python2.7-dev \
     git && \
-    python3 -m pip install ROPgadget && \
-    cd /tmp/ && \
-    wget https://github.com/gabime/spdlog/archive/refs/tags/v1.3.1.tar.gz && \
-    tar -zxf v1.3.1.tar.gz && mv spdlog-1.3.1/include/spdlog /usr/include/
+    python3 -m pip install ROPgadget
 
 # Clone llvm-project
 WORKDIR /usr/local/
@@ -30,6 +27,15 @@ RUN mkdir build && cd build && \
     -DLLVM_USE_LINKER=gold \
     -G "Unix Makefiles" /usr/local/llvm-project/llvm && \
     make -j && make install
+
+# Clone spdlog
+WORKDIR /usr/local/
+RUN git clone https://github.com/gabime/spdlog.git
+
+# Build spdlog
+WORKDIR /usr/local/
+RUN mkdir build && cd build && \
+    cmake .. && make -j
 
 # Clone Moss
 WORKDIR /usr/local/
