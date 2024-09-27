@@ -26,16 +26,11 @@ RUN mkdir build && cd build && \
     -DLLVM_ENABLE_RTTI=ON \
     -DLLVM_USE_LINKER=gold \
     -G "Unix Makefiles" /usr/local/llvm-project/llvm && \
-    make -j && make install
+    make -j8 && make install
 
-# Clone spdlog
-WORKDIR /usr/local/
-RUN git clone https://github.com/gabime/spdlog.git
-
-# Build spdlog
-WORKDIR /usr/local/
-RUN mkdir build && cd build && \
-    cmake .. && make -j
+# Install spdlog
+RUN wget https://github.com/gabime/spdlog/archive/refs/tags/v1.9.2.tar.gz && \
+    tar -xf v1.9.2.tar.gz && mv spdlog-1.9.2/include/spdlog /usr/include/
 
 # Clone Moss
 WORKDIR /usr/local/
@@ -46,7 +41,7 @@ RUN git clone https://github.com/BaiGeiQiShi/Moss.git && \
 WORKDIR /usr/local/Moss
 RUN mkdir -p /usr/local/Moss/CovBlock_Stmt/build && cd /usr/local/Moss/CovBlock_Stmt/build && cmake .. && make && \
     mkdir -p /usr/local/Moss/CovPath/build && cd /usr/local/Moss/CovPath/build && cmake .. && make && \
-    cd /usr/local/Moss/CovPath && ./compile_java
+    cd /usr/local/Moss/CovPath && chmod 755 ./compile_java  && ./compile_java
 
 # Clone MossBenchmark
 WORKDIR /
