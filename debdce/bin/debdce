@@ -1,0 +1,25 @@
+#!/bin/bash
+
+inputf=$1  #Input source file
+outputf=$2 #Path to hold the resulting file
+BIN=/home/qxin6/debdce/build/bin/debdce
+
+if [ -z ${inputf} ] || [ -z ${outputf} ]; then
+    echo "Missing inputf or outputf"
+    exit 1
+fi
+
+inputfname=$(basename ${inputf})
+if [ -d debdcetmp ]; then
+    rm -fr debdcetmp/*
+else
+    mkdir debdcetmp
+fi
+cp ${inputf} debdcetmp/${inputfname}
+cd debdcetmp
+
+$BIN debdcetest.sh ${inputfname} #It's fine that test.sh doesn't exist
+
+cd ..
+mv debdcetmp/${inputfname}.dce.c ${outputf}
+rm -fr debdcetmp
