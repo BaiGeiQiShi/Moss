@@ -1,6 +1,7 @@
 FROM ubuntu:18.04
 
 # Install necessary packages
+RUN ln -s /usr/bin/python2.7 /usr/bin/python
 RUN apt-get update && apt-get install -y cmake  \
     libreadline-dev && \
     apt install -y libncurses-dev && \
@@ -12,6 +13,11 @@ RUN apt-get update && apt-get install -y cmake  \
     python2.7-dev \
     git && \
     python3 -m pip install ROPgadget
+RUN apt install -y nlohmann-json-dev \
+    python-pip \
+    python-pefile && \
+    pip install pyelftools==0.29 && \
+    pip install capstone==5.0.0
 
 # Clone llvm-project
 WORKDIR /usr/local/
@@ -23,10 +29,14 @@ WORKDIR /usr/local/llvm-project
 RUN mkdir build && cd build && \
     cmake -DCMAKE_BUILD_TYPE=Release \
     -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;compiler-rt;libclc;libcxx;libcxxabi;libunwind;lld;polly" \
+    -DLLVM_BUILD_LLVM_DYLIB=ON \ 
+    -DLLVM_LINK_LLVM_DYLIB=ON \
     -DLLVM_ENABLE_RTTI=ON \
     -DLLVM_USE_LINKER=gold \
     -G "Unix Makefiles" /usr/local/llvm-project/llvm && \
     make -j8 && make install
+ENV CC=clang
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
 
 # Install spdlog
 RUN wget https://github.com/gabime/spdlog/archive/refs/tags/v1.9.2.tar.gz && \
@@ -51,6 +61,11 @@ RUN git clone https://github.com/BaiGeiQiShi/MossBenchmark.git
 WORKDIR /usr/local/Moss/cov
 RUN chmod 755 setenv && chmod 755 compile.sh && ./compile.sh && bash ./setenv
 
+# Build debdce
+WORKDIR /usr/local/
+RUN mv /usr/local/Moss/debdce /usr/local/debdce
+RUN mkdir -p /usr/local/debdce/build && cd /usr/local/debdce/build && cmake .. && make
+
 # Add user for chown-8.2
 RUN groupadd mychown && \
     useradd -m -g mychown mychown && \
@@ -61,5 +76,19 @@ WORKDIR /
 RUN cp -r /MossBenchmark/postgresql-12.14 /postgresql-12.14 && \
 		adduser postgres && \
 		passwd -d postgres
+
+# Clone Chisel and Razor
+WORKDIR /
+RUN git clone https://github.com/aspire-project/chisel.git
+RUN git clone https://github.com/cxreet/razor.git
+
+# Build Chisel
+WORKDIR /
+RUN mkdir -p /chisel/build && cd /chisel/build && CXX=clang cmake .. && make
+ENV PATH=$PATH:/chisel/build/bin
+
+# Build Razor
+WORKDIR /
+RUN cd /razor/tracers && python build.py dynamorio && python build.py pin
 
 CMD ["/bin/bash"]
