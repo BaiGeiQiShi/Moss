@@ -61,9 +61,9 @@ chmod -R a+rw src && cp -r /postgresql-12.14 /tmp/postgresql-12.14
 ```
 
 ### Note:
-1. You need to seperately install two tools in two folders(```CovBlock_Stmt``` and ```CovPath```).
-2. If you move the path of LLVM, you need to change the CMakeLists.txt in ```CovBlock_Stmt``` and ```CovPath```. In CMakeLists.txt, you should change the last two lines of `include_directories` (lines ending with "Change to your own path!") to your own paths.
-3. To compile ```CovPath``` manually, you should run:
+1. Currently, we have implemented two versions of Moss for single-file and multi-file debloating. In each version, you need to seperately install two tools in two folders (i.e., ```CovBlock_Stmt``` and ```CovPath```).
+3. If you move the path of LLVM, you need to change the CMakeLists.txt in ```CovBlock_Stmt``` and ```CovPath```. In CMakeLists.txt, you should change the last two lines of `include_directories` (lines ending with "Change to your own path!") to your own paths.
+4. To compile ```CovPath``` manually, you should run:
 ```
 cd ./CovPath
 mkdir build && cd build
