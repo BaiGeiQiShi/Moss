@@ -49,9 +49,13 @@ RUN git clone https://github.com/BaiGeiQiShi/Moss.git && \
 
 # Build Moss
 WORKDIR /usr/local/Moss
-RUN mkdir -p /usr/local/Moss/CovBlock_Stmt/build && cd /usr/local/Moss/CovBlock_Stmt/build && cmake .. && make && \
-    mkdir -p /usr/local/Moss/CovPath/build && cd /usr/local/Moss/CovPath/build && cmake .. && make && \
-    cd /usr/local/Moss/CovPath && chmod 755 ./compile_java  && ./compile_java
+RUN mkdir -p /usr/local/Moss/multiFiles/CovBlock_Stmt/build && cd /usr/local/Moss/multiFiles/CovBlock_Stmt/build && cmake .. && make && \
+    mkdir -p /usr/local/Moss/multiFiles/CovPath/build && cd /usr/local/Moss/multiFiles/CovPath/build && cmake .. && make && \
+    cd /usr/local/Moss/multiFiles/CovPath && chmod 755 ./compile_java  && ./compile_java
+
+RUN mkdir -p /usr/local/Moss/singleFile/CovBlock_Stmt/build && cd /usr/local/Moss/singleFile/CovBlock_Stmt/build && cmake .. && make && \
+    mkdir -p /usr/local/Moss/singleFile/CovPath/build && cd /usr/local/Moss/singleFile/CovPath/build && cmake .. && make && \
+    cd /usr/local/Moss/singleFile/CovPath && chmod 755 ./compile_java  && ./compile_java
 
 # Clone MossBenchmark
 WORKDIR /
