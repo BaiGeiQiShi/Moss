@@ -45,8 +45,7 @@ RUN wget https://github.com/gabime/spdlog/archive/refs/tags/v1.9.2.tar.gz && \
 
 # Clone Moss
 WORKDIR /usr/local/
-RUN git clone https://github.com/BaiGeiQiShi/Moss.git && \
-    cp -r Moss Moss-postgres
+RUN git clone https://github.com/BaiGeiQiShi/Moss.git
 
 # Build Moss
 WORKDIR /usr/local/Moss
