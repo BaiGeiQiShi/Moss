@@ -64,7 +64,7 @@ RUN git clone https://github.com/BaiGeiQiShi/MossBenchmark.git
 
 # Build cov
 WORKDIR /usr/local/Moss/cov
-RUN chmod 755 setenv && chmod 755 compile.sh && ./compile.sh && bash ./setenv && chmod 755 bin/*
+RUN chmod 755 setenv && chmod 755 compile.sh && ./compile.sh && . setenv && chmod 755 bin/*
 
 # Build debdce
 WORKDIR /usr/local/
