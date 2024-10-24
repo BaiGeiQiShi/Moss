@@ -18,7 +18,8 @@ RUN apt install -y nlohmann-json-dev \
     python-pip \
     python-pefile && \
     pip install pyelftools==0.29 && \
-    pip install capstone==5.0.0
+    pip install capstone==5.0.0 && \
+    pip install progress
 
 # Clone llvm-project
 WORKDIR /usr/local/
