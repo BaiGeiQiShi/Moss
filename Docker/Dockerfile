@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y cmake  \
     apt install -y openjdk-8-jdk   \
     python3-pip  \
     wget  \
+    vim \
     libmlpack-dev \
     libperl-dev \
     python2.7-dev \
