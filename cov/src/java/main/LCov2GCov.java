@@ -57,10 +57,6 @@ public class LCov2GCov
 		rslt_sb.append("\nlcount:");
 		rslt_sb.append(da_elems[0] + "," + da_elems[1]);
 	    }
-
-	    else if(lcov_fline.startsWith("end_of_record")){
-		rslt_sb.append("\n");
-	    }
 	}
 
 	return rslt_sb.toString();
