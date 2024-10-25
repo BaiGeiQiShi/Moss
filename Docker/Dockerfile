@@ -46,7 +46,8 @@ RUN wget https://github.com/gabime/spdlog/archive/refs/tags/v1.9.2.tar.gz && \
 
 # Clone Moss
 WORKDIR /usr/local/
-RUN git clone https://github.com/BaiGeiQiShi/Moss.git
+RUN git clone https://github.com/BaiGeiQiShi/Moss.git && \
+    cp -r /usr/local/Moss/logger/* /usr/local/bin/
 
 # Build Moss
 WORKDIR /usr/local/Moss
