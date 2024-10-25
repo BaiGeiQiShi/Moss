@@ -14,9 +14,9 @@ fi
 
 
 WORKDIR=$(pwd)
-SEARCHBIN="java -cp :../build/java:../lib/java/* edu.gatech.cc.domgad.GCovBasedMCMCSearch"
+SEARCHBIN="java -cp :../build/java:../lib/java/* moss.covpath.GCovBasedMCMCSearch"
 LINEPRINTERBIN="../build/bin/instrumenter -g statement test.sh"
-EMPTYGENBIN="java -cp :../build/java:../lib/java/* edu.gatech.cc.domgad.EmptyProgramGenerator"
+EMPTYGENBIN="java -cp :../build/java:../lib/java/* moss.covpath.EmptyProgramGenerator"
 
 
 #Clean up

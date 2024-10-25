@@ -1,4 +1,4 @@
-package edu.gatech.cc.domgad;
+package moss.covpath;
 
 import java.util.List;
 import java.util.ArrayList;

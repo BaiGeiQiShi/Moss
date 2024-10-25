@@ -16,8 +16,8 @@ if [ ! -f ${ARG_DIR}/${id} ]; then
 fi
 
 WORKDIR=$(pwd)
-GCOV_ANAL_BIN="java -cp :${WORKDIR}/../build/java:${WORKDIR}/../lib/java/* edu.gatech.cc.domgad.GCovAnalyzer"
-LCOV2GCOV_BIN="java -cp :${WORKDIR}/../build/java:${WORKDIR}/../lib/java/* edu.gatech.cc.domgad.LCov2GCov"
+GCOV_ANAL_BIN="java -cp :${WORKDIR}/../build/java:${WORKDIR}/../lib/java/* moss.covpath.GCovAnalyzer"
+LCOV2GCOV_BIN="java -cp :${WORKDIR}/../build/java:${WORKDIR}/../lib/java/* moss.covpath.LCov2GCov"
 
 echo "Producing instrumented program"
 if [ ! -f $PROGID ]; then
