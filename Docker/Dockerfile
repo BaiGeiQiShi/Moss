@@ -5,6 +5,7 @@ RUN ln -s /usr/bin/python2.7 /usr/bin/python
 RUN apt-get update && apt-get install -y cmake  \
     libreadline-dev && \
     apt install -y python3.8 && \
+    update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
     apt install -y libncurses-dev && \
     apt install -y openjdk-8-jdk   \
     python3-pip  \
@@ -96,9 +97,5 @@ ENV PATH=$PATH:/chisel/build/bin
 # Build Razor
 WORKDIR /
 RUN cd /razor/tracers && python build.py dynamorio && python build.py pin
-
-# Update Python version
-WORKDIR /
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 2
 
 CMD ["/bin/bash"]
