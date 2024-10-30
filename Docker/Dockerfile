@@ -17,6 +17,8 @@ RUN apt install -y libncurses-dev && \
     libperl-dev \
     python2.7-dev \
     git && \
+    python3 -m pip install setuptools && \
+    python3 -m pip install wheel && \
     python3 -m pip install ROPgadget
 RUN apt install -y nlohmann-json-dev \
     python-pip \
