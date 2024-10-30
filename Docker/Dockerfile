@@ -3,7 +3,7 @@ FROM ubuntu:18.04
 # Install necessary packages
 RUN ln -s /usr/bin/python2.7 /usr/bin/python
 RUN apt-get update && apt-get install -y cmake  \
-    libreadline-dev && \i
+    libreadline-dev && \
     apt install python3.8 && \
     apt install -y libncurses-dev && \
     apt install -y openjdk-8-jdk   \
