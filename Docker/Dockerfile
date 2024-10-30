@@ -68,9 +68,8 @@ WORKDIR /usr/local/Moss/cov
 RUN chmod 755 setenv && chmod 755 compile.sh && ./compile.sh && . setenv && chmod 755 bin/*
 
 # Build debdce
-WORKDIR /usr/local/
-RUN mv /usr/local/Moss/debdce /usr/local/debdce
-RUN mkdir -p /usr/local/debdce/build && cd /usr/local/debdce/build && cmake .. && make
+WORKDIR /usr/local/Moss/debdce
+RUN mkdir -p build && cd build && cmake .. && make
 
 # Add user for chown-8.2
 RUN groupadd mychown && \
