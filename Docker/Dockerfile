@@ -5,6 +5,9 @@ RUN ln -s /usr/bin/python2.7 /usr/bin/python
 RUN apt-get update && apt-get install -y cmake  \
     libreadline-dev && \
     apt-get install -y python3.8 python3.8-dev python3.8-distutils
+# 设置 python3 的默认版本
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 1 && \
+    update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 2
 RUN apt install -y libncurses-dev && \
     apt install -y openjdk-8-jdk   \
     python3-pip  \
@@ -15,10 +18,6 @@ RUN apt install -y libncurses-dev && \
     python2.7-dev \
     git && \
     python3 -m pip install ROPgadget
-# 设置 python3 的默认版本
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 1 && \
-    update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 2
-    
 RUN apt install -y nlohmann-json-dev \
     python-pip \
     python-pefile && \
