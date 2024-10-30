@@ -760,7 +760,7 @@ public class GCovBasedMCMCSearch
     private static int[] getSize(String prog_dpath, File reduced_codef) {
         DefaultExecutor executor = new DefaultExecutor();
         executor.setWorkingDirectory(new File(prog_dpath));
-        ExecuteWatchdog watchdog = new ExecuteWatchdog(30000); //Timeout in 30s
+        ExecuteWatchdog watchdog = new ExecuteWatchdog(600000); //Timeout in 30s
         executor.setWatchdog(watchdog);
 
         //Run getsize.sh
