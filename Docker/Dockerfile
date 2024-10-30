@@ -19,9 +19,9 @@ RUN apt-get update && apt-get install -y cmake  \
 RUN apt install -y nlohmann-json-dev \
     python-pip \
     python-pefile && \
-    pip install pyelftools==0.29 && \
-    pip install capstone==5.0.0 && \
-    pip install progress
+    python3 -m pip install pyelftools==0.29 && \
+    python3 -m pip install capstone==5.0.0 && \
+    python3 -m pip install progress
 
 # Clone llvm-project
 WORKDIR /usr/local/
