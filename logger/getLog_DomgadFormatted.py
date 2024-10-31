@@ -120,8 +120,8 @@ def logAnalysePass(GetAccepts:bool,inputfile:str,outputfile:str, GetAll=False):
             for samplenum in Samples:
                 for ss in Samples[samplenum]:
                     print(*ss[2:],sep="\t",file=output)
-        #BestScores_String="\t".join(sudo docker build . --network=host  --build-arg "HTTP_PROXY=http://127.0.0.1:7890" --build-arg "HTTPS_PROXY=http://127.0.0.1:7890" --build-arg "NO_PROXY=localhost,127.0.0.1"  -t moss-testBestScores)
-        #os.system(f"sed -i '1i\{BestScores_String}' {outputfile}")
+        BestScores_String="\t".join(BestScores)
+        os.system(f"sed -i '1i\{BestScores_String}' {outputfile}")
         #subprocess.run(["/usr/local/bin/sendemail.py", f"{inputfile} done", f"{inputfile} done",f"{os.path.abspath(inputfile)}"])
     elif(GetAccepts):
         #region DiffAccepts
