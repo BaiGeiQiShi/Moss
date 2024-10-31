@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.8
+#!/usr/bin/env python3
 '''
 For debop format(start with "Oracle...")
 '''
@@ -61,30 +61,30 @@ with open(logfile) as Log, open(outputfile,"w+") as Output:
             12119: Initial G score is Not 1
         '''
         #region error wrappers
-        class ErrorCode(Enum):
-            CBSError=12117
-            ISNZError=12118
-            IGN1Error=12119
-        def mail_With_Same_Subject_Content(*args):
-            subprocess.run(["/usr/local/bin/sendemail.py",args[0],*args])
-        #endregion error wrappers
-        if(line.startswith("Some bugs occur during random selecting!")):
-            mail_With_Same_Subject_Content(f"covBloat stop unexpected==>'{os.path.abspath(logfile)}'",os.path.abspath(logfile))
-            exit(ErrorCode.CBSError)
-        if(not init_check and len(current_scores)==8):
-            if(current_scores[2]!=0):#init SR is not 0
-                mail_With_Same_Subject_Content(f"'{os.path.abspath(logfile)}' get wrong input .c file at SR")
-                exit(ErrorCode.ISNZError)
-            if(current_scores[5]!=1):#init G is not 1
-                mail_With_Same_Subject_Content(f"'{os.path.abspath(logfile)}' get wrong input .c file at G")
-                exit(ErrorCode.IGN1Error)
-            init_check=True
-        if(len(log)<20):
-            mail_With_Same_Subject_Content(f"{os.path.abspath(logfile)} is {len(log)} lines. Some bugs may occur",os.path.abspath(logfile))
-            exit(1)
+#        class ErrorCode(Enum):
+#            CBSError=12117
+#            ISNZError=12118
+#            IGN1Error=12119
+#        def mail_With_Same_Subject_Content(*args):
+#            subprocess.run(["/usr/local/bin/sendemail.py",args[0],*args])
+#        #endregion error wrappers
+#        if(line.startswith("Some bugs occur during random selecting!")):
+#            mail_With_Same_Subject_Content(f"covBloat stop unexpected==>'{os.path.abspath(logfile)}'",os.path.abspath(logfile))
+#            exit(ErrorCode.CBSError)
+#        if(not init_check and len(current_scores)==8):
+#            if(current_scores[2]!=0):#init SR is not 0
+#                mail_With_Same_Subject_Content(f"'{os.path.abspath(logfile)}' get wrong input .c file at SR")
+#                exit(ErrorCode.ISNZError)
+#            if(current_scores[5]!=1):#init G is not 1
+#                mail_With_Same_Subject_Content(f"'{os.path.abspath(logfile)}' get wrong input .c file at G")
+#                exit(ErrorCode.IGN1Error)
+#            init_check=True
+#        if(len(log)<20):
+#            mail_With_Same_Subject_Content(f"{os.path.abspath(logfile)} is {len(log)} lines. Some bugs may occur",os.path.abspath(logfile))
+#            exit(1)
         #endregion ErrorHandle
     best_score_string='\t'.join(str(item) for item in best_score)
     subprocess.run(f"sed -i '1i{best_score_string}\n' {outputfile}",shell=True)
     # print("Best sample: ","\t".join([str(item) for item in best_score]))
-    mail_With_Same_Subject_Content(f"'{logfile}' is done. \nBest sample:{best_score}",os.path.abspath(logfile))
+#    mail_With_Same_Subject_Content(f"'{logfile}' is done. \nBest sample:{best_score}",os.path.abspath(logfile))
     exit(0)

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.8
+#!/usr/bin/env python3
 from enum import Enum
 import os
 import re
@@ -38,7 +38,9 @@ def logAnalysePass(GetAccepts:bool,inputfile:str,outputfile:str, GetAll=False):
             Initscores=[];inited=False
             BestScores=[]
             args=[]
-            while l:=input.readline():
+            l = input.readline()
+            while l:
+                l = input.readline()
                 #region Find_input_args
                 if(len(args)<3):
                     for arg in ("Weight kr:","Weight w:", "K-value:"):
@@ -118,9 +120,9 @@ def logAnalysePass(GetAccepts:bool,inputfile:str,outputfile:str, GetAll=False):
             for samplenum in Samples:
                 for ss in Samples[samplenum]:
                     print(*ss[2:],sep="\t",file=output)
-        BestScores_String="\t".join(BestScores)
-        os.system(f"sed -i '1i\{BestScores_String}' {outputfile}")
-        subprocess.run(["/usr/local/bin/sendemail.py", f"{inputfile} done", f"{inputfile} done",f"{os.path.abspath(inputfile)}"])
+        #BestScores_String="\t".join(sudo docker build . --network=host  --build-arg "HTTP_PROXY=http://127.0.0.1:7890" --build-arg "HTTPS_PROXY=http://127.0.0.1:7890" --build-arg "NO_PROXY=localhost,127.0.0.1"  -t moss-testBestScores)
+        #os.system(f"sed -i '1i\{BestScores_String}' {outputfile}")
+        #subprocess.run(["/usr/local/bin/sendemail.py", f"{inputfile} done", f"{inputfile} done",f"{os.path.abspath(inputfile)}"])
     elif(GetAccepts):
         #region DiffAccepts
         Samples = []
