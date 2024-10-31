@@ -3,12 +3,9 @@ FROM ubuntu:18.04
 # Install necessary packages
 RUN ln -s /usr/bin/python2.7 /usr/bin/python
 RUN apt-get update && apt-get install -y cmake  \
-    libreadline-dev && \
-    apt-get install -y python3.8 python3.8-dev python3.8-distutils
-# 设置 python3 的默认版本
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 1 && \
-    update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 2
-RUN apt install -y libncurses-dev && \
+    libreadline-dev && \i
+    apt install python3.8 && \
+    apt install -y libncurses-dev && \
     apt install -y openjdk-8-jdk   \
     python3-pip  \
     wget  \
@@ -17,14 +14,12 @@ RUN apt install -y libncurses-dev && \
     libperl-dev \
     python2.7-dev \
     git && \
-    python3 -m pip install setuptools && \
-    python3 -m pip install wheel && \
     python3 -m pip install ROPgadget
 RUN apt install -y nlohmann-json-dev \
     python-pip \
     python-pefile && \
-    python3 -m pip install pyelftools==0.29 && \
-    python3 -m pip install capstone==5.0.0 && \
+    pip install pyelftools==0.29 && \
+    pip install capstone==5.0.0 && \
     python3 -m pip install progress
 
 # Clone llvm-project
@@ -71,7 +66,7 @@ RUN git clone https://github.com/BaiGeiQiShi/MossBenchmark.git
 
 # Build cov
 WORKDIR /usr/local/Moss/cov
-RUN chmod 755 setenv && chmod 755 compile.sh && ./compile.sh && ./setenv && chmod 755 bin/*
+RUN chmod 755 setenv && chmod 755 compile.sh && ./compile.sh && . setenv && chmod 755 bin/*
 
 # Build debdce
 WORKDIR /usr/local/Moss/debdce
