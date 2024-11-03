@@ -39,7 +39,7 @@ public class GCovBasedMCMCSearch
         int quan_num = Integer.parseInt(args[11]); //#Total inputs used for path quantification
 	sred_type = Integer.parseInt(args[12]); //Set the size reduction size{0: covered lines; 1: executable bytes; 2: covered stmts (see progcounter's stmt visitor for a stmt's definition).}
 	File base_inputs_file = new File(args[13]);
-	long timeoutDuration;
+	long timeoutDuration = 0;
 	if(args.length == 15){
 	    int timeout = Integer.parseInt(args[14]);
 	    timeoutDuration = TimeUnit.MINUTES.toMillis(timeout);
