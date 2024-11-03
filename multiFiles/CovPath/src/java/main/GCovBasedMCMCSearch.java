@@ -25,6 +25,7 @@ import moss.covpath.LogUtil;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.ExecuteWatchdog;
+import java.util.concurrent.*;
 
 public class GCovBasedMCMCSearch {
 	private static int errid = 0;
@@ -59,6 +60,7 @@ public class GCovBasedMCMCSearch {
 		options.addOption(
 				"B", "baseinputfile", true, "base inputs file. Testcases in it will not be removed");
 		options.addOption("h", "help", false, "Display this help message");
+		options.addOption("U", "timeout", true, "Set the timeout for the debloating progress");
 
 		org.apache.commons.cli.CommandLineParser parser = new org.apache.commons.cli.DefaultParser();
 		org.apache.commons.cli.CommandLine cmd = null;
@@ -77,8 +79,21 @@ public class GCovBasedMCMCSearch {
 		int quan_num = 0;
 		File base_inputs_file = null;
 		Set<Integer> base_inputs = new HashSet<>();
+		long timeoutDuration = 0;
+
+		//Get Start timestamp
+                long start_t = System.currentTimeMillis();
+
+
 		try {
 			cmd = parser.parse(options, args);
+
+
+			if (cmd.hasOption("timeout")) {
+                        	int timeout = Integer.parseInt(cmd.getOptionValue("timeout"));
+		        	timeoutDuration = TimeUnit.MINUTES.toMillis(timeout);
+                        }
+			
 
 			if (cmd.hasOption("help")) {
 				new org.apache.commons.cli.HelpFormatter().printHelp("CovPath", options);
@@ -216,8 +231,13 @@ public class GCovBasedMCMCSearch {
 			LogUtil.logInfo("K-value: " + kvalue);
 			LogUtil.logInfo("Total Number of Inputs used for Path Quantification: " + quan_num);
 
+			if(cmd.hasOption("timeout")){
+			        int timeout = Integer.parseInt(cmd.getOptionValue("timeout"));
+        			LogUtil.logInfo("Timeout: "+timeout+" minute(s).");
+    			}
+
+
 			// Build the trace-count map (showing how many inputs covered by each trace)
-			// TODO: REMOVE 计算每个Trace(path)的count 执行次数？
 			Map<Integer, Integer> trace_count_map = getTraceIdCountMap(trace_count_f);
 
 			int tnum = trace_count_map.keySet().size();
@@ -809,6 +829,16 @@ public class GCovBasedMCMCSearch {
 
 			// #region Iteration loop
 			for (int iter = 0; iter < max_iters && samples < max_samples; iter++) {
+				if(cmd.hasOption("timeout")){
+		                	//Get Current timestamp
+                			long nowTime = System.currentTimeMillis();
+                			if (nowTime - start_t >= timeoutDuration) {
+                    				LogUtil.logInfo("Timeout reached, exiting...");
+                    				break;
+                			}
+            			}
+
+				
 				LogUtil.logInfo("<<<<<<<<<<<<<<<<<<<<<<<<<<");
 				LogUtil.logInfo("Best Sample Id: " + best_sample);
 				LogUtil.logInfo("Best Size Reduction: " + best_sred);

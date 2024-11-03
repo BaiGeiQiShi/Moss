@@ -5,6 +5,7 @@
 #include <spdlog/sinks/basic_file_sink.h>
 #include <stdlib.h>
 #include <time.h>
+#include <chrono>
 
 #include "DeadcodeElimination.h"
 #include "FileManager.h"
@@ -90,6 +91,13 @@ int reduceOneFile(std::string &File)
 void reduceProject()
 {
 	spdlog::get("Logger")->info("*Start Reduction on the Project");
+	
+	//Use Timeout
+        std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
+        if(OptionManager::UseTimeout){
+                spdlog::get("Logger")->info("Timeout: {} minutes", OptionManager::Timeout.count());
+        }
+
 
 	Profiler::Init();
 	FileManager::GetInstance()->saveSample("sample-1"); // Save the initial program
@@ -98,6 +106,14 @@ void reduceProject()
 	int curr_iter = 0;
 	while (curr_sample < OptionManager::MaxSamples && curr_iter < OptionManager::MaxIters)
 	{
+		
+		std::chrono::steady_clock::time_point now_time = std::chrono::steady_clock::now();
+                if(now_time - start_time >= OptionManager::Timeout){
+                        spdlog::get("Logger")->info("Timeout reached, exiting...");
+                        break;
+                }
+
+
 		std::get<0>(Profiler::curr_iter_info) = curr_iter;
 		std::get<1>(Profiler::curr_iter_info) = curr_sample;
 

@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <nlohmann/json.hpp>
-
+#include <chrono>
 #include <spdlog/spdlog.h>
 
 using json = nlohmann::json;
@@ -26,6 +26,9 @@ public:
   static std::string CoverageFile;
   static std::string CovStatement;
   static std::string BaseInputs;
+  static std::chrono::minutes Timeout;
+  static bool UseTimeout;
+
 
   /// @brief Compare Input Origin Files with Tempfile(which is generally an already reduced file), and assign stmts' existence according to whether it is reduced or not in Tempfile. 
   /// Attention: One tempfile should only be used in One project, in case of ambiguity.
