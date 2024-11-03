@@ -159,13 +159,13 @@ cd ./postgresql-12.14
 # 2.Run Moss without must-handle inputs
 python3 start_debloat.py
 
-# 3.Run Moss with must-handle inputs (26 programs)
+# 3.Run Moss with must-handle inputs
 python3 start_debloat_must.py
 
-# 4.Run Debop (26 programs)
+# 4.Run Debop
 python3 start_debloat_debop.py
 
-# 5.Run Debop-M (26 programs). Debop-M: Debop with must-handle inputs.
+# 5.Run Debop-M (Debop with must-handle inputs).
 python3 start_debloat_debopm.py
 
 # 6.Run the ablation experiment
