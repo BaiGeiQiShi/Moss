@@ -11,6 +11,7 @@
 #include <string>
 #include <stack>
 #include <sstream>
+#include <chrono>
 
 #include "clang/Lex/Lexer.h"
 
@@ -82,6 +83,12 @@ void LocalReduction::HandleTranslationUnit(clang::ASTContext& Ctx) {
 	float GENFACTOR = OptionManager::GenFactor;
 	float ELEM_SELECT_PROB = OptionManager::ElemSelectProb;
 	Profiler* Prof = Profiler::GetInstance();
+
+	//Use Timeout
+	std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
+	if(OptionManager::UseTimeout){
+		spdlog::get("Logger")->info("Timeout: {} minutes", OptionManager::Timeout);
+	}
 
 	spdlog::get("Logger")->info("Max Samples: {}", MAX_SAMPLES);
 	spdlog::get("Logger")->info("Max Iterations: {}", MAX_ITERS);
@@ -802,6 +809,12 @@ void LocalReduction::HandleTranslationUnit(clang::ASTContext& Ctx) {
 
 
 	while (curr_samples < MAX_SAMPLES && curr_iter < MAX_ITERS) {
+		std::chrono::steady_clock::time_point now_time = std::chrono::steady_clock::now();
+		if(now_time - start_time >= OptionManager::Timeout){
+			spdlog::get("Logger")->info("Timeout reached, exiting...");
+			break;
+		}
+		
 		spdlog::get("Logger")->info("");
 		spdlog::get("Logger")->info("Current Iteration: {}; Current Samples: {}",
 			std::to_string(curr_iter),
