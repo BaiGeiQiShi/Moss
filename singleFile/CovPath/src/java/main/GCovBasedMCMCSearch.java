@@ -93,9 +93,14 @@ public class GCovBasedMCMCSearch
     for (int i=0; i<tnum; i++) { total_count += tid_count_map.get(i).intValue(); }
     info_sb.append("\nMax Generality: " + ((float) total_count / (float) quan_num));
     System.out.println(info_sb.toString());
+    if(args.length == 15){
+	int timeout = Integer.parseInt(args[14]);
+        System.out.println("Timeout: "+timeout+" minute(s).");
+    }
+
 
     //Bloated path
-	List<Integer> bloated = new ArrayList<Integer>();
+    List<Integer> bloated = new ArrayList<Integer>();
 
     //Build the trace-file map (showing which file-id, from ip_cover_dir, contains the trace)
     Map<Integer,String> tid_file_map = getTraceIdFileIdMap(trace_count_f);
@@ -778,7 +783,7 @@ public class GCovBasedMCMCSearch
     private static int[] getSize(String prog_dpath, File reduced_codef) {
         DefaultExecutor executor = new DefaultExecutor();
         executor.setWorkingDirectory(new File(prog_dpath));
-        ExecuteWatchdog watchdog = new ExecuteWatchdog(600000); //Timeout in 30s
+        ExecuteWatchdog watchdog = new ExecuteWatchdog(600000); //Timeout in 10min
         executor.setWatchdog(watchdog);
 
         //Run getsize.sh
