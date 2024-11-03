@@ -84,7 +84,7 @@ static struct option long_options[] = {
     {"timeout", required_argument, 0, 'U'},
     {0, 0, 0, 0}};
 
-static const char *optstring = "ho:t:sDdglcLGCpvSm:i:a:e:k:z:j:BE:F:I:T:M:";
+static const char *optstring = "ho:t:sDdglcLGCpvSm:i:a:e:k:z:j:BE:F:I:T:M:U:";
 
 std::string OptionManager::BinFile = "";
 std::vector<std::string> OptionManager::InputFiles;

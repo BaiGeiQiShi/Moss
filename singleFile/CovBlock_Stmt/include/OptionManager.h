@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <chrono>
 
 /// \brief Manages and processes all the command-line options that are passed to Chisel
 class OptionManager {
@@ -46,7 +47,9 @@ public:
   static float K;
   static float GenFactor;
   static float ElemSelectProb;
-  
+  static std::chrono::minutes Timeout;
+  static bool UseTimeout; 
+
   static void showUsage();
   static void handleOptions(int argc, char *argv[]);
 };

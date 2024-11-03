@@ -87,7 +87,7 @@ void LocalReduction::HandleTranslationUnit(clang::ASTContext& Ctx) {
 	//Use Timeout
 	std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
 	if(OptionManager::UseTimeout){
-		spdlog::get("Logger")->info("Timeout: {} minutes", OptionManager::Timeout);
+		spdlog::get("Logger")->info("Timeout: {} minutes", OptionManager::Timeout.count());
 	}
 
 	spdlog::get("Logger")->info("Max Samples: {}", MAX_SAMPLES);
@@ -107,7 +107,7 @@ void LocalReduction::HandleTranslationUnit(clang::ASTContext& Ctx) {
     std::vector<std::vector<int> > Elements;  //line info of all elements
 
     //about Dependency
-	std::vector<std::vector<int> > elem_to_depds;  //Dependency sheet
+    std::vector<std::vector<int> > elem_to_depds;  //Dependency sheet
     std::vector<int> line_col(4); //line-column dependency info
     std::vector<int> elem_line_col(5); //save the begin and end line&col info of all elements
 
