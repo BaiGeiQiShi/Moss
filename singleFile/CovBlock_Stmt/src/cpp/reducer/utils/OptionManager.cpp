@@ -125,7 +125,7 @@ float OptionManager::Beta = 0.5;
 float OptionManager::K = 1;
 float OptionManager::GenFactor = 1;
 float OptionManager::ElemSelectProb = -1;
-std::chrono::seconds OptionManager::Timeout;
+std::chrono::seconds OptionManager::Timeout = std::chrono::seconds(1);
 bool OptionManager::UseTimeout = false;
 
 void OptionManager::handleOptions(int argc, char *argv[]) {
@@ -295,7 +295,7 @@ void OptionManager::handleOptions(int argc, char *argv[]) {
   }
 
   // Use the timeout
-  if(OptionManager::Timeout != std::chrono::seconds(5)){
+  if(OptionManager::Timeout != std::chrono::seconds(1)){
       OptionManager::UseTimeout = true;
   }
 	
