@@ -35,11 +35,16 @@ public class GCovBasedMCMCSearch
         float w = Float.parseFloat(args[9]); //Weight balancing red & gen
         double kvalue = Float.parseFloat(args[10]); //Constant for computing density score
         int quan_num = Integer.parseInt(args[11]); //#Total inputs used for path quantification
-	    sred_type = Integer.parseInt(args[12]); //Set the size reduction size{0: covered lines; 1: executable bytes; 2: covered stmts (see progcounter's stmt visitor for a stmt's definition).}
-	    File base_inputs_file = new File(args[13]);
+	sred_type = Integer.parseInt(args[12]); //Set the size reduction size{0: covered lines; 1: executable bytes; 2: covered stmts (see progcounter's stmt visitor for a stmt's definition).}
+	File base_inputs_file = new File(args[13]);
+	if(args.length == 15){
+	    int timeout = Integer.parseInt(args[14]);
+	    long timeoutDuration = TimeUnit.MINUTES.toMillis(timeout);
+	}	
 
 	//Get Start timestamp
-	//long start_t = System.currentTimeMillis();
+	long start_t = System.currentTimeMillis();
+	
 
 	//Get base inputs id
 	boolean use_base_inputs = true;
@@ -424,6 +429,16 @@ public class GCovBasedMCMCSearch
         //Iteration loop
         for (int iter=0; iter<max_iters; iter++) {
             if (samples >= max_samples) { break; }
+
+	    if(args.length == 15){
+	        //Get Current timestamp
+	        long nowTime = System.currentTimeMillis();
+                if (nowTime - start_t >= timeoutDuration) {
+                    System.out.println("Timeout reached, exiting...");
+                    break;
+                }
+	    }
+		
 
 
             StringBuilder best_rslt_sb = new StringBuilder();
