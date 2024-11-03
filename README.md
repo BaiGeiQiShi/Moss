@@ -125,7 +125,8 @@ MOSS_BIN [OPTION] ORACLE_FILE SOURCE_FILE
 -k: K value (for computing density values)
 -q: Total inputs used for path quantification
 -S: Set the size reduction type (0: covered lines; 1: executable bytes; 2: covered stmts)
--B: A file that indicates the must-handle inputs.
+-B: A file that indicates the must-handle inputs
+-U: Timeout of debloating process
 
 # CovBlock_Stmt
 -m: Max samples number
@@ -138,6 +139,7 @@ MOSS_BIN [OPTION] ORACLE_FILE SOURCE_FILE
 -M: If you want to use MCMC at the Statement level with unequal select probability, add this option, and you must specify the coverage info file following this option
 -I: A file that indicates the must-handle inputs.
 -T: If you want to debloat a program that has already been debloated, please add this option and specify the reduced program
+-U: Timeout of debloating process
 ```
 
 ### Note:
