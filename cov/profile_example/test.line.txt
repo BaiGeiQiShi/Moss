@@ -1,0 +1,11 @@
+function:1,12,main
+statement:1,12,fbcompound
+statement:2,2,decl
+statement:3,11,if
+statement:3,5,compound
+statement:4,4,other
+statement:6,11,if
+statement:6,8,compound
+statement:7,7,other
+statement:9,11,compound
+statement:10,10,other

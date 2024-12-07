@@ -1,0 +1,14 @@
+#!/bin/bash
+DEBOP_HOME=/usr/local/Moss/CovBlock_Stmt
+DEBOP=$DEBOP_HOME/build/bin/reducer
+OPTIONS="-v -m 10 -i 100 -a 0.5 -e 0.5 -k 50 -s ./test.sh"
+ARGS="--build -- make origin_bin"
+
+rm -rf debop-out
+
+cp subfile0.c.real.origin.c subfile0.c
+cp subfile1.c.real.origin.c subfile1.c
+cp integration1.c.real.origin.c integration1.c
+
+make clean &> /dev/null
+$DEBOP $OPTIONS $ARGS

@@ -1,0 +1,1 @@
+clang,-c,-I/postgreql-12.14/src/common,-I/postgresql-12.14/src/include,/tmp/postgresql-12.14/src/backend/executor/execSRF.c

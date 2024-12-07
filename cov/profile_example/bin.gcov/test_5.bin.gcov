@@ -1,0 +1,15 @@
+file:/usr/local/cov/profile_example/test.c
+function:1,1,main
+lcount:1,1
+lcount:2,1
+lcount:3,1
+lcount:4,0
+lcount:5,0
+lcount:6,1
+lcount:7,0
+lcount:8,0
+lcount:9,1
+lcount:10,1
+lcount:11,1
+lcount:12,1
+

@@ -5,5 +5,5 @@ rootdir=$COV_HOME
 gcovf=$1
 analtype=$2 #getlcov: get all covered line numbers (by analyzing the lcount lines)
 
-java -cp :${rootdir}/build/java:${rootdir}/lib/java/* edu.gatech.cc.debaug.GCovAnalyzer ${gcovf} ${analtype}
+java -Xmx4G -cp :${rootdir}/build/java:${rootdir}/lib/java/* cov.GCovAnalyzer ${gcovf} ${analtype}
 

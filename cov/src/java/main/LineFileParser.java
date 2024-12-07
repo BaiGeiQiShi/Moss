@@ -1,4 +1,4 @@
-package edu.gatech.cc.debaug;
+package cov;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -71,6 +71,38 @@ public class LineFileParser
 		if (lmap.get(sl) == null) {
 		    lmap.put(sl, elems[2]);
 		}
+	    }
+	}
+
+	return lmap;
+    }
+
+    public static Map<Integer, String> getEndPropertyLineMap(File linef, String granu) {
+	Map<Integer, String> lmap = new HashMap<Integer, String>();
+	List<String> linef_lines = null;
+        try { linef_lines = FileUtils.readLines(linef, (String) null); }
+	catch (Throwable t) { System.err.println(t); t.printStackTrace(); }
+        if (linef_lines == null) { return lmap; }
+
+        for (String linef_line : linef_lines) {
+            linef_line = linef_line.trim();
+            String[] elems = null;
+            if (linef_line.startsWith(granu+":")) {
+                elems = linef_line.substring((granu+":").length()).split(",");
+            }
+            else {
+                continue;
+            }
+
+	    int el = Integer.parseInt(elems[1]);
+	    if (elems.length > 2) {
+			if (lmap.get(el) == null) {
+				lmap.put(el, elems[2]);
+			}else if ("compound".equals(elems[2])) {
+				lmap.put(el, "compound");
+			}{
+
+			}
 	    }
 	}
 
