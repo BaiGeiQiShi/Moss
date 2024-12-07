@@ -56,7 +56,8 @@ mkdir $(pwd)/pgsql/data && \
 chmod -R a+rw . && chown -R postgres . && \
 su postgres -c "pgsql/bin/initdb -D $(pwd)/pgsql/data" && \
 su postgres -c "pgsql/bin/pg_ctl -D /postgresql-12.14/pgsql/data/ -l logfile start" && \
-chmod -R a+rw src && cp -r /postgresql-12.14 /tmp/postgresql-12.14
+chmod -R a+rw src && cp -r /postgresql-12.14 /tmp/postgresql-12.14 && \
+cp -r /tmp/postgresql-12.14/tmp_400_pg /tmp/postgresql-12.14/tmp
 ```
 
 ### Note:
