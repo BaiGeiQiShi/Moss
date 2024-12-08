@@ -60,7 +60,9 @@ RUN mkdir -p /usr/local/Moss/multiFiles/CovBlock_Stmt/build && cd /usr/local/Mos
     cd /usr/local/Moss/multiFiles/CovPath && chmod 755 ./compile_java  && ./compile_java
 
 RUN mkdir -p /usr/local/Moss/singleFile/CovBlock_Stmt/build && cd /usr/local/Moss/singleFile/CovBlock_Stmt/build && cmake .. && make && \
+    chmod 755 /usr/local/Moss/singleFile/CovBlock_Stmt/build/lib/wrappers/* && \
     mkdir -p /usr/local/Moss/singleFile/CovPath/build && cd /usr/local/Moss/singleFile/CovPath/build && cmake .. && make && \
+    chmod 755 /usr/local/Moss/singleFile/CovPath/build/lib/wrappers/* && \
     cd /usr/local/Moss/singleFile/CovPath && chmod 755 ./compile_java  && ./compile_java
 
 # Clone MossBenchmark
