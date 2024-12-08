@@ -43,7 +43,7 @@ docker run -dit --name moss moss-env /bin/bash
 ```bash
 # Inside the docker container
 ## Install packages that require interaction
-apt install tcl8.6-dev expect
+apt install tcl-dev expect
 
 ## Setup Postgresql
 cd /postgresql-12.14 && \
