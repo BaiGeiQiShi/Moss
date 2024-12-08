@@ -21,7 +21,7 @@ RUN apt install -y nlohmann-json-dev \
     pip install pyelftools==0.29 && \
     pip install capstone==5.0.0 && \
     python3 -m pip install progress
-RUN apt install -y flex bison tcl-dev
+RUN apt install -y flex bison
 
 # Clone llvm-project
 WORKDIR /usr/local/
