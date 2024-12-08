@@ -810,7 +810,7 @@ void LocalReduction::HandleTranslationUnit(clang::ASTContext& Ctx) {
 
 	while (curr_samples < MAX_SAMPLES && curr_iter < MAX_ITERS) {
 		std::chrono::steady_clock::time_point now_time = std::chrono::steady_clock::now();
-		if(now_time - start_time >= OptionManager::Timeout){
+		if(OptionManager::UseTimeout && (now_time - start_time >= OptionManager::Timeout)){
 			spdlog::get("Logger")->info("Timeout reached, exiting...");
 			break;
 		}
