@@ -22,8 +22,8 @@ message(STATUS "CXX flags: " ${CMAKE_CXX_FLAGS})
 include_directories(${LLVM_INCLUDE_DIRS})
 include_directories(${CLANG_INCLUDE_DIRS})
 include_directories(include)
-include_directories(/home/qxin6/llvm-project/clang/include) #Change to your own path!
-include_directories(/home/qxin6/llvm-project/build/tools/clang/include) #Change to your own path!
+include_directories(/usr/local/llvm-project/clang/include) #Change to your own path!
+include_directories(/usr/local/llvm-project/build/tools/clang/include) #Change to your own path!
 
 add_executable(debdce
   src/main/cpp/Main.cpp
