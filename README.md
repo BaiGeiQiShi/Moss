@@ -47,7 +47,7 @@ apt install tcl-dev expect
 
 ## Setup Postgresql
 cd /postgresql-12.14 && \
-chmod -R a+rw . && chown -R postgres . && \
+tar -zxvf Cov_info.json.tar.gz && chmod -R a+rw . && chown -R postgres . && \
 CC=clang CFLAGS="-O3" ./configure --prefix=$(pwd)/pgsql && \
 su postgres -c "make" && \
 su postgres -c "make install" && \
