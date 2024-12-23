@@ -18,7 +18,7 @@ DOMGAD_DIR="/usr/local/Moss/singleFile/CovPath"
 COV="/usr/local/Moss/cov"
 LINEPRINTERBIN=f"{DOMGAD_DIR}/build/bin/instrumenter -g statement test.sh"
 SEARCHBIN=f"java -cp ':{DOMGAD_DIR}/build/java:{DOMGAD_DIR}/lib/java/*:{DOMGAD_DIR}/lib/java/commons-cli-1.5.0/*' moss.covpath.GCovBasedMCMCSearch"
-iternum=str(1)
+iternum=str(10)
 realorcov="cov"
 filter="nodeclstmt"
 #endregion ENVSandARGS
