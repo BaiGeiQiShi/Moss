@@ -153,8 +153,6 @@ In the docker container, we have cloned the Moss benchmark. To reproduce our exp
 # 1.Choose an arbitrary program to debloat
 ## Choose an arbitrary program (from 25 programs) to debloat
 cd /MossBenchmark/$PROGRAM
-## To debloat PostgreSQL, you need to use this following command instead. Since PostgreSQL can only be executed under the postgresql user, we created a separate copy of PostgreSQL in the root directory to facilitate file permission modifications.
-cd ./postgresql-12.14
 
 # 2.Run Moss without must-handle inputs
 python3 start_debloat.py
@@ -172,6 +170,22 @@ python3 start_debloat_debopm.py
 python3 start_debloat-s12.py  #Moss-s1,2
 python3 start_debloat-s13.py  #Moss-s1,3
 python3 start_debloat-s23.py  #Moss-s2,3
+
+## To debloat PostgreSQL, you need to use this following command instead. Since PostgreSQL can only be executed under the postgresql user, we created a separate copy of PostgreSQL in the root directory to facilitate file permission modifications.
+# 1.Change the directory to debloat
+cd /postgresql-12.14
+
+# 2.Run Moss without must-handle inputs
+./start_debloat
+
+# 3.Run Moss with must-handle inputs
+./start_debloat_must
+
+# 4.Run Debop
+./start_debloat_debop
+
+# 5.Run Debop-M (Debop with must-handle inputs).
+./start_debloat_debopm
 ```
 
 ### Note:
