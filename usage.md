@@ -29,5 +29,5 @@ cd /MossBenchmark/make-3.79
 ```bash
 cd /postgresql-12.14
 ### use start_debloat to wrap the invocation to start_debloat.py, for python script is sometimes not so robust
-su postgres && ./start_debloat
+./start_debloat
 ```
