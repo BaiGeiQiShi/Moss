@@ -53,7 +53,7 @@ su postgres -c "make" && \
 su postgres -c "make install" && \
 rm -rf $(pwd)/pgsql/data && \
 mkdir $(pwd)/pgsql/data && \
-chmod -R a+rw . && chown -R postgres . && chown -R root testscripts && \
+chmod -R a+rw . && chown -R postgres . && chown -R root testscript && \
 su postgres -c "pgsql/bin/initdb -D $(pwd)/pgsql/data" && \
 su postgres -c "pgsql/bin/pg_ctl -D /postgresql-12.14/pgsql/data/ -l logfile start" && \
 chmod -R a+rw src && cp -r /postgresql-12.14 /tmp/postgresql-12.14
