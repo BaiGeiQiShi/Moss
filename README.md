@@ -187,9 +187,9 @@ cd /postgresql-12.14
 ./start_debloat_debopm
 
 # 6.Run the ablation experiment
-./start_debloat-s12.py  #Moss-s1,2
-./start_debloat-s13.py  #Moss-s1,3
-./start_debloat-s23.py  #Moss-s2,3
+./start_debloat-s12  #Moss-s1,2
+./start_debloat-s13  #Moss-s1,3
+./start_debloat-s23  #Moss-s2,3
 ```
 
 ### Note:
