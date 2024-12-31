@@ -149,8 +149,8 @@ We also integrated Debop into Moss. If you don't use either the -F option or the
 In the docker container, we have cloned the Moss benchmark. To reproduce our experiments, you can execute the following cli command:
 
 ``` shell
-# 1.Choose an arbitrary program to debloat
-## Choose an arbitrary program (from 25 programs) to debloat
+## To debloat 25 single-file programs
+# 1.Choose an arbitrary program (from 25 programs) to debloat
 cd /MossBenchmark/$PROGRAM
 
 # 2.Run Moss without must-handle inputs
